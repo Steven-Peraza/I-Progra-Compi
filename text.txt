@@ -1,10 +1,1 @@
-
-    "_hostia";
-    "ACM1PT";
-
-/Estos es un comment
-/*bloque
-*/
-/*//kjojoj*/
-
 a=a+5;

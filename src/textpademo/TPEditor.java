@@ -205,10 +205,6 @@ public class TPEditor {
         itemSaveAs.setActionCommand("cmd_saveas");
         itemSaveAs.addActionListener(eventHandler);
 
-        JMenuItem itemPrint = new JMenuItem("Imprimir");
-        itemPrint.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_MASK));
-        itemPrint.setActionCommand("cmd_print");
-
         JMenuItem itemExit = new JMenuItem("Salir");
         itemExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_MASK));
         itemExit.setActionCommand("cmd_exit");
@@ -217,8 +213,6 @@ public class TPEditor {
         menuFile.add(itemOpen);
         menuFile.add(itemSave);
         menuFile.add(itemSaveAs);
-        menuFile.addSeparator();
-        menuFile.add(itemPrint);
         menuFile.addSeparator();
         menuFile.add(itemExit);
         //----------------------------------------------
@@ -379,11 +373,6 @@ public class TPEditor {
         buttonSaveAs.setIcon(new ImageIcon(getClass().getResource("/res/tp_saveas.png")));
         buttonSaveAs.setActionCommand("cmd_saveas");
 
-        JButton buttonPrint = new JButton();
-        buttonPrint.setToolTipText("Imprimir");
-        buttonPrint.setIcon(new ImageIcon(getClass().getResource("/res/tp_print.png")));
-        buttonPrint.setActionCommand("cmd_print");
-
         buttonUndo = new JButton();
         buttonUndo.setEnabled(false);
         buttonUndo.setToolTipText("Deshacer");
@@ -416,8 +405,6 @@ public class TPEditor {
         jToolBar.add(buttonSave);
         jToolBar.add(buttonSaveAs);
         jToolBar.addSeparator();    //añade separadores entre algunos botones
-        jToolBar.add(buttonPrint);
-        jToolBar.addSeparator();
         jToolBar.add(buttonUndo);
         jToolBar.add(buttonRedo);
         jToolBar.addSeparator();
@@ -679,9 +666,9 @@ public class TPEditor {
                 actionPerformer.actionSave();
             } else if (ac.equals("cmd_saveas") == true) {    //opción seleccionada: "Guardar como"
                 actionPerformer.actionSaveAs();
-            } else if (ac.equals("cmd_print") == true) {    //opción seleccionada: "Imprimir"
+            }/* else if (ac.equals("cmd_print") == true) {    //opción seleccionada: "Imprimir"
                 actionPerformer.actionPrint();
-            } else if (ac.equals("cmd_exit") == true) {    //opción seleccionada: "Salir"
+            }*/ else if (ac.equals("cmd_exit") == true) {    //opción seleccionada: "Salir"
                 actionPerformer.actionExit();
             } else if (ac.equals("cmd_undo") == true) {    //opción seleccionada: "Deshacer"
                 actionPerformer.actionUndo();

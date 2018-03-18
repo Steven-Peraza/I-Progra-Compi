@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.*;
 
 import java.io.FileReader;
 import java.util.List;
+import javax.swing.JFrame;
 
 /**
  * Created by oviquez on 28/2/2018.
@@ -21,6 +22,9 @@ public class Main {
             inst = new ScannerSS4(input);
             tokens = new CommonTokenStream(inst);
             parser = new ParserUI(tokens);
+            ParseTree tree = parser.program();
+            java.util.concurrent.Future <JFrame> treeGUI = org.antlr.v4.gui.Trees.inspect(tree,parser);
+            treeGUI.get().setVisible(true);
         }
         catch(Exception e){System.out.println("No hay archivo");}
 
