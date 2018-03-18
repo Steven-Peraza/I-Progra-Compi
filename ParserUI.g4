@@ -34,8 +34,4 @@ moreExpressions    	: (COMA expression)*;
 printExpression      	: PUTS PIZQ expression PDER;
 ifExpression	: IF expression blockStatement (ELSE blockStatement | );
 blockStatement	: LLIZQ statement* LLDER;
-comment: DOBSLA CHAR*? WS;
-blockComment: INICOME CHAR*? WS FINCOME;
-//comment: DOBSLA STRING WS;
-/*blockComment: INICOME STRING WS FINCOME;*/
-nestComment: INICOME comment FINCOME;
+

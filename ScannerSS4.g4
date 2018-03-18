@@ -52,6 +52,9 @@ BOOL: TRUE | FALSE;
 CHAR: ( LETTER | DIGIT );
 
 
+COMMENT : INICOME (COMMENT|.)*? FINCOME -> channel(HIDDEN) ;
+LINE_COMMENT  : DOBSLA .*? '\n' -> channel(HIDDEN) ;
+
 
 fragment LETTER :'a'..'z' | 'A'..'Z' | '_';
 fragment DIGIT :'0'..'9';
