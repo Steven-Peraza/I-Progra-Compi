@@ -3,10 +3,8 @@ package textpademo;
 import generated.ParserUI;
 import generated.ScannerSS4;
 import org.antlr.v4.gui.TreeViewer;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.Arrays;
@@ -416,10 +414,14 @@ public class ActionPerformer {
         ANTLRInputStream input=null;
         CommonTokenStream tokens = null;
         try {
-            input = new ANTLRInputStream(new FileReader(tpEditor.getCurrentFile().getName()));
+            input = new ANTLRInputStream(new FileReader(tpEditor.getCurrentFile()));
             inst = new ScannerSS4(input);
+            inst.removeErrorListeners();
+            inst.addErrorListener(ThrowingErrorListener.INSTANCE);
             tokens = new CommonTokenStream(inst);
             parser = new ParserUI(tokens);
+            parser.removeErrorListeners();
+            parser.addErrorListener(ThrowingErrorListener.INSTANCE);
             /*FALTAN LOS ERRORES*/
         }
         catch(Exception e){System.out.println("No hay archivo");}
@@ -427,10 +429,10 @@ public class ActionPerformer {
 
         try {
             ParseTree tree = parser.program();
-            System.out.println("Compilación Exitosa!!\n");
+            System.out.println("Compilacion Exitosa!!\n");
         }
-        catch(RecognitionException e){
-            System.out.println("Compilación Fallida!!");
+        catch(ParseCancellationException e){
+            System.out.println("Compilacion Fallida!!");
         }
     }
 
@@ -446,10 +448,14 @@ public class ActionPerformer {
         ANTLRInputStream input=null;
         CommonTokenStream tokens = null;
         try {
-            input = new ANTLRInputStream(new FileReader(tpEditor.getCurrentFile().getName()));
+            input = new ANTLRInputStream(new FileReader(tpEditor.getCurrentFile()));
             inst = new ScannerSS4(input);
+            //inst.removeErrorListeners();
+            //inst.addErrorListener(ThrowingErrorListener.INSTANCE);
             tokens = new CommonTokenStream(inst);
             parser = new ParserUI(tokens);
+            //parser.removeErrorListeners();
+            //parser.addErrorListener(ThrowingErrorListener.INSTANCE);
             ParseTree tree = parser.program();
 
             //show AST in console
@@ -463,11 +469,11 @@ public class ActionPerformer {
             viewr.setScale(1.5);//scale a little
             panel.add(viewr);
             frame.add(panel);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
             frame.setSize(200,200);
             frame.setVisible(true);
         }
-        catch(Exception e){System.out.println("No hay archivo");}
+        catch(Exception e){System.out.println("Error al mostrar el arbol");}
 
     }
     /**
