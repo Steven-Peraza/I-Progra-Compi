@@ -7,7 +7,9 @@ options {
 
 
 program  		: statement*;
-statement  	: LET letStatement | RETURN returnStatement | expressionStatement;
+statement  	: LET letStatement                  #LineaLET
+            | RETURN returnStatement            #LineaRETURN
+            | expressionStatement               #LineaEXPRESSION;
 letStatement          	: ID ASSIGN expression ( PyCOMA | );
 returnStatement	: expression ( PyCOMA | );
 expressionStatement 	: expression ( PyCOMA | );

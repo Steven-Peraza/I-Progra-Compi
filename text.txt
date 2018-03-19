@@ -1,7 +1,1 @@
-let a=a+5;
-/*esto es un comment
-adasd*/
-//asddas
-let b=b-3;
-/*asdasd//asdsad*/
-
+tpEditor.getCurrentFile().getName()

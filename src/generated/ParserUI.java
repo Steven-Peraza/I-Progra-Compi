@@ -153,21 +153,35 @@ public class ParserUI extends Parser {
 	}
 
 	public static class StatementContext extends ParserRuleContext {
-		public TerminalNode LET() { return getToken(ParserUI.LET, 0); }
-		public LetStatementContext letStatement() {
-			return getRuleContext(LetStatementContext.class,0);
-		}
-		public TerminalNode RETURN() { return getToken(ParserUI.RETURN, 0); }
-		public ReturnStatementContext returnStatement() {
-			return getRuleContext(ReturnStatementContext.class,0);
-		}
-		public ExpressionStatementContext expressionStatement() {
-			return getRuleContext(ExpressionStatementContext.class,0);
-		}
 		public StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_statement; }
+	 
+		public StatementContext() { }
+		public void copyFrom(StatementContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class LineaLETContext extends StatementContext {
+		public TerminalNode LET() { return getToken(ParserUI.LET, 0); }
+		public LetStatementContext letStatement() {
+			return getRuleContext(LetStatementContext.class,0);
+		}
+		public LineaLETContext(StatementContext ctx) { copyFrom(ctx); }
+	}
+	public static class LineaRETURNContext extends StatementContext {
+		public TerminalNode RETURN() { return getToken(ParserUI.RETURN, 0); }
+		public ReturnStatementContext returnStatement() {
+			return getRuleContext(ReturnStatementContext.class,0);
+		}
+		public LineaRETURNContext(StatementContext ctx) { copyFrom(ctx); }
+	}
+	public static class LineaEXPRESSIONContext extends StatementContext {
+		public ExpressionStatementContext expressionStatement() {
+			return getRuleContext(ExpressionStatementContext.class,0);
+		}
+		public LineaEXPRESSIONContext(StatementContext ctx) { copyFrom(ctx); }
 	}
 
 	public final StatementContext statement() throws RecognitionException {
@@ -178,6 +192,7 @@ public class ParserUI extends Parser {
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case LET:
+				_localctx = new LineaLETContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(62);
@@ -187,6 +202,7 @@ public class ParserUI extends Parser {
 				}
 				break;
 			case RETURN:
+				_localctx = new LineaRETURNContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(64);
@@ -211,6 +227,7 @@ public class ParserUI extends Parser {
 			case ID:
 			case NUM:
 			case STRING:
+				_localctx = new LineaEXPRESSIONContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(66);

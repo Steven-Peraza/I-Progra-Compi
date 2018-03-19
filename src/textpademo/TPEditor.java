@@ -400,6 +400,16 @@ public class TPEditor {
         buttonPaste.setIcon(new ImageIcon(getClass().getResource("/res/tp_paste.png")));
         buttonPaste.setActionCommand("cmd_paste");
 
+        JButton buttonParser = new JButton();
+        buttonParser.setToolTipText("Parsear");
+        buttonParser.setIcon(new ImageIcon(getClass().getResource("/res/tp_run.png")));
+        buttonParser.setActionCommand("cmd_parsear");
+
+        JButton buttonTree = new JButton();
+        buttonTree.setToolTipText("AST");
+        buttonTree.setIcon(new ImageIcon(getClass().getResource("/res/tp_showtree.png")));
+        buttonTree.setActionCommand("cmd_tree");
+
         jToolBar.add(buttonNew);    //se añaden los botones construidos a la barra de herramientas
         jToolBar.add(buttonOpen);
         jToolBar.add(buttonSave);
@@ -411,6 +421,10 @@ public class TPEditor {
         jToolBar.add(buttonCut);
         jToolBar.add(buttonCopy);
         jToolBar.add(buttonPaste);
+        jToolBar.addSeparator();
+        jToolBar.addSeparator();
+        jToolBar.add(buttonParser);
+        jToolBar.add(buttonTree);
 
         /** itera sobre todos los componentes de la barra de herramientas, se les asigna el
          mismo margen y el mismo manejador de eventos unicamente a los botones */
@@ -666,9 +680,7 @@ public class TPEditor {
                 actionPerformer.actionSave();
             } else if (ac.equals("cmd_saveas") == true) {    //opción seleccionada: "Guardar como"
                 actionPerformer.actionSaveAs();
-            }/* else if (ac.equals("cmd_print") == true) {    //opción seleccionada: "Imprimir"
-                actionPerformer.actionPrint();
-            }*/ else if (ac.equals("cmd_exit") == true) {    //opción seleccionada: "Salir"
+            } else if (ac.equals("cmd_exit") == true) {    //opción seleccionada: "Salir"
                 actionPerformer.actionExit();
             } else if (ac.equals("cmd_undo") == true) {    //opción seleccionada: "Deshacer"
                 actionPerformer.actionUndo();
@@ -713,9 +725,13 @@ public class TPEditor {
             } else if (ac.equals("cmd_about") == true) {    //opción seleccionada: "Acerca de"
                 //presenta un dialogo modal con alguna informacion
                 JOptionPane.showMessageDialog(jFrame,
-                        "TextPad Demo por Dark[byte]",
+                        "Profe, denos una 100, plz... XD",
                         "Acerca de",
                         JOptionPane.INFORMATION_MESSAGE);
+            } else if (ac.equals("cmd_parsear") == true) {    //opción seleccionada: "Color de fondo"
+                actionPerformer.actionParser();
+            } else if (ac.equals("cmd_tree") == true) {    //opción seleccionada: "Color de fondo"
+                actionPerformer.actionAST();
             }
         }
 

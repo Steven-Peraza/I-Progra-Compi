@@ -1,5 +1,18 @@
 package textpademo;
 
+import generated.ParserUI;
+import generated.ScannerSS4;
+import org.antlr.v4.gui.TreeViewer;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
+
+import java.util.Arrays;
+import java.util.List;
+
+
 import java.awt.Color;
 import java.awt.Font;
 import java.io.BufferedReader;
@@ -9,9 +22,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.regex.Pattern;
-import javax.swing.JColorChooser;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.undo.CannotRedoException;
@@ -150,7 +161,7 @@ public class ActionPerformer {
                 //escribe desde el flujo de datos hacia el archivo
                 tpEditor.getJTextArea().write(bw);
                 bw.close();    //cierra el flujo
-
+                System.out.println("Por aki pase... XD");
                 //marca el estado del documento como no modificado
                 tpEditor.setDocumentChanged(false);
             } catch (IOException ex) {    //en caso de que ocurra una excepción
@@ -174,7 +185,7 @@ public class ActionPerformer {
         //presenta un dialogo modal para que el usuario seleccione un archivo
         int state = fc.showSaveDialog(tpEditor.getJFrame());
         if (state == JFileChooser.APPROVE_OPTION) {    //si elige guardar en el archivo
-            File f = fc.getSelectedFile();    //obtiene el archivo seleccionado
+            File f = new File(fc.getSelectedFile() + ".txt");    //obtiene el archivo seleccionado
 
             try {
                 //abre un flujo de datos hacia el archivo asociado seleccionado
@@ -391,6 +402,74 @@ public class ActionPerformer {
         }
     }
 
+
+    /**
+     * Opción seleccionada: "Compilacion/Parser".
+     *
+     * Le permite al usuario compilar...
+     */
+    public void actionParser() {
+        actionSave();
+        ScannerSS4 inst = null;
+        ParserUI parser = null;
+
+        ANTLRInputStream input=null;
+        CommonTokenStream tokens = null;
+        try {
+            input = new ANTLRInputStream(new FileReader(tpEditor.getCurrentFile().getName()));
+            inst = new ScannerSS4(input);
+            tokens = new CommonTokenStream(inst);
+            parser = new ParserUI(tokens);
+            /*FALTAN LOS ERRORES*/
+        }
+        catch(Exception e){System.out.println("No hay archivo");}
+
+
+        try {
+            ParseTree tree = parser.program();
+            System.out.println("Compilación Exitosa!!\n");
+        }
+        catch(RecognitionException e){
+            System.out.println("Compilación Fallida!!");
+        }
+    }
+
+    /**
+     * Opción seleccionada: "Color de fondo".
+     *
+     * Le permite al usuario elegir el color para el fondo del área de edición.
+     */
+    public void actionAST() {
+        actionSave();
+        ScannerSS4 inst = null;
+        ParserUI parser = null;
+        ANTLRInputStream input=null;
+        CommonTokenStream tokens = null;
+        try {
+            input = new ANTLRInputStream(new FileReader(tpEditor.getCurrentFile().getName()));
+            inst = new ScannerSS4(input);
+            tokens = new CommonTokenStream(inst);
+            parser = new ParserUI(tokens);
+            ParseTree tree = parser.program();
+
+            //show AST in console
+            System.out.println(tree.toStringTree(parser));
+
+            //show AST in GUI
+            JFrame frame = new JFrame("Antlr AST");
+            JPanel panel = new JPanel();
+            TreeViewer viewr = new TreeViewer(Arrays.asList(
+                    parser.getRuleNames()),tree);
+            viewr.setScale(1.5);//scale a little
+            panel.add(viewr);
+            frame.add(panel);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(200,200);
+            frame.setVisible(true);
+        }
+        catch(Exception e){System.out.println("No hay archivo");}
+
+    }
     /**
      * Retorna la instancia de un JFileChooser, con el cual se muestra un dialogo que permite
      * seleccionar un archivo.
