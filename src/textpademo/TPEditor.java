@@ -55,7 +55,7 @@ import javax.swing.undo.UndoManager;
  */
 public class TPEditor {
 
-    private JFrame jFrame;            //instancia de JFrame (ventana principal)
+    public static JFrame jFrame;            //instancia de JFrame (ventana principal)
     private JMenuBar jMenuBar;        //instancia de JMenuBar (barra de menú)
     private JToolBar jToolBar;        //instancia de JToolBar (barra de herramientas)
     private JTextArea jTextArea;      //instancia de JTextArea (área de edición)

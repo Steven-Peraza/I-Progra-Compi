@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ActionPerformer {
 
     private final TPEditor tpEditor;    //instancia de TPEditor (la clase principal)
     private String lastSearch = "";     //la última búsqueda de texto realizada, por defecto no contiene nada
-
+    private static java.util.concurrent.Future <JFrame> treeGUI;
     /**
      * Constructor de la clase.
      *
@@ -456,16 +457,9 @@ public class ActionPerformer {
             System.out.println(tree.toStringTree(parser));
 
             //show AST in GUI
-            JFrame frame = new JFrame("Antlr AST");
-            JPanel panel = new JPanel();
-            TreeViewer viewr = new TreeViewer(Arrays.asList(
-                    parser.getRuleNames()),tree);
-            viewr.setScale(1.5);//scale a little
-            panel.add(viewr);
-            frame.add(panel);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(200,200);
-            frame.setVisible(true);
+            TreeViewer viewr = new TreeViewer(Arrays.asList(parser.getRuleNames()),tree);
+            //viewr.setScale(1.3);//scale a little
+            viewr.open();
         }
         catch(Exception e){System.out.println("No hay archivo");}
 
