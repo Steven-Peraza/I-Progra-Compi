@@ -1,1 +1,0 @@
-tpEditor.getCurrentFile().getName()

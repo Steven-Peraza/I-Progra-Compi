@@ -7,12 +7,7 @@
 
 package textpademo;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -21,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.PrintStream;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -61,6 +57,7 @@ public class TPEditor {
     private JTextArea jTextArea;      //instancia de JTextArea (área de edición)
     private JPopupMenu jPopupMenu;    //instancia de JPopupMenu (menú emergente)
     private JPanel statusBar;         //instancia de JPanel (barra de estado)
+    private JPanel console;
 
     private JCheckBoxMenuItem itemLineWrap;         //instancias de algunos items de menú que necesitan ser accesibles
     private JCheckBoxMenuItem itemShowToolBar;
@@ -77,6 +74,7 @@ public class TPEditor {
     private JLabel sbFilePath;    //etiqueta que muestra la ubicación del archivo actual
     private JLabel sbFileSize;    //etiqueta que muestra el tamaño del archivo actual
     private JLabel sbCaretPos;    //etiqueta que muestra la posición del cursor en el área de edición
+    private JTextArea consoleTxt;     // etiqueta que muestra la consola.
 
     private boolean hasChanged = false;    //el estado del documento actual, no modificado por defecto
     private File currentFile = null;       //el archivo actual, ninguno por defecto
@@ -138,12 +136,20 @@ public class TPEditor {
         buildToolBar();      //construye la barra de herramientas
         buildStatusBar();    //construye la barra de estado
         buildPopupMenu();    //construye el menú emergente
+        buildConsole();      // construye el area de consola
+
 
         jFrame.setJMenuBar(jMenuBar);                              //designa la barra de menú del JFrame
         Container c = jFrame.getContentPane();                     //obtiene el contendor principal
         c.add(jToolBar, BorderLayout.NORTH);                       //añade la barra de herramientas, orientación NORTE del contendor
         c.add(new JScrollPane(jTextArea), BorderLayout.CENTER);    //añade el area de edición en el CENTRO
-        c.add(statusBar, BorderLayout.SOUTH);                      //añade la barra de estado, orientación SUR
+        //c.add(statusBar, BorderLayout.CENTER);
+        c.add(console,BorderLayout.SOUTH);//añade la barra de estado, orientación SUR
+        console.add(statusBar);
+        PrintStream printStream = new PrintStream(new CustomOutputStream(getConsoleTxt()));
+        System.setOut(printStream);
+        System.setErr(printStream);
+
 
         //configura el JFrame con un tamaño inicial proporcionado con respecto a la pantalla
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
@@ -176,6 +182,7 @@ public class TPEditor {
         jTextArea.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK), "none");    //remueve CTRL + C ("Copiar")
         jTextArea.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK), "none");    //remueve CTRL + V ("Pegar")
     }
+
 
     /**
      * Construye la barra de menú.
@@ -457,6 +464,7 @@ public class TPEditor {
         //construye la etiqueta para mostrar la posición del cursor en el documento actual
         sbCaretPos = new JLabel("...");
 
+
         /** se añaden las etiquetas construidas al JPanel, el resultado es un panel
          similar a una barra de estado */
         statusBar.add(sbFilePath);
@@ -465,6 +473,26 @@ public class TPEditor {
         statusBar.add(Box.createRigidArea(new Dimension(10, 0)));
         statusBar.add(Box.createHorizontalGlue());
         statusBar.add(sbCaretPos);
+
+
+    }
+
+    /**
+     * Construye la barra de estado.
+     */
+    private void buildConsole() {
+        console = new JPanel();
+        //se configura con un BoxLayout
+        console.setLayout(new BoxLayout(console, BoxLayout.Y_AXIS));
+        // le añade un borde compuesto
+        console.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLoweredBevelBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        consoleTxt = new JTextArea();
+        console.add(consoleTxt);
+
+
+
     }
 
     /**
@@ -654,6 +682,15 @@ public class TPEditor {
     JLabel getJLabelFileSize() {
         return sbFileSize;
     }
+
+    /**
+     * Retorna la instancia del textArea de la consola, donde se encuentra la info de consola.
+     * @return la consola
+     */
+    public JTextArea getConsoleTxt() {
+        return consoleTxt;
+    }
+
 
     /**
      * Clase interna que extiende e implementa las clases e interfaces necesarias para
