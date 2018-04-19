@@ -1,3 +1,4 @@
+import Checker.CheckerSB;
 import generated.*;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -31,6 +32,8 @@ public class Main {
 
         try {
         ParseTree tree = parser.program();
+        CheckerSB v=new CheckerSB();
+        v.visit(tree);
         System.out.println("Compilación Exitosa!!\n");
     }
         catch(RecognitionException e){

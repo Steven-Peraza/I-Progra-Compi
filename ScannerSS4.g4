@@ -47,9 +47,11 @@ PUTS: 'puts'|'PUTS';
 ID: LETTER(LETTER|DIGIT)*;
 NUM: DIGIT DIGIT*;
 RETURN: 'return'|'RETURN';
-STRING: '"' CHAR*? '"';
+STRING: '"' CARAC*? '"';
 BOOL: TRUE | FALSE;
-CHAR: ( LETTER | DIGIT );
+CHAR: '\'' ( LETTER | DIGIT ) '\'';
+
+CARAC: ( LETTER | DIGIT );
 
 
 COMMENT : INICOME (COMMENT|.)*? FINCOME -> channel(HIDDEN) ;
