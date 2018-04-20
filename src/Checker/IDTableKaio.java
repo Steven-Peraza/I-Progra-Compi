@@ -17,6 +17,7 @@ public class IDTableKaio {
         int type; //forma simple de identificar un tipo del lenguaje [0--> Entero] NO ES TAN CECESARIO EN ESTE LENGUAJE ALPHA PUESTO QUE SOLO ACEPTA NUMEROS
         ParserRuleContext decl; //por si fuera necesario saber más acerca del contexto del identificador en el árbol
 
+
         public Ident(int n, Token t, int ty, ParserRuleContext d) {
             nivel = n;
             tok = t;

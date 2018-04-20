@@ -2,6 +2,7 @@ package Checker;
 
 import generated.ParserUIBaseVisitor;
 import generated.ParserUI;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class CheckerSB extends ParserUIBaseVisitor{
     private IDTableKaio tablaIDs = null;
@@ -18,7 +19,9 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitStatementLET(ParserUI.StatementLETContext ctx) {
+        tablaIDs.openScope();
         visit(ctx.letStatement());
+        tablaIDs.closeScope();
         return null;
     }
 
@@ -36,8 +39,24 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitLetAST(ParserUI.LetASTContext ctx) {
-        visit(ctx.expression());
-        return null;
+        int tipo=-1;
+        tipo = (Integer) visit(ctx.expression());
+        // al igual que con las vars se debe buscar en la tabla de IDs para comprobar si la const ya existe
+        IDTableKaio.Ident res = tablaIDs.buscar(ctx.ID().getText());
+        if(tipo == 4){
+            System.out.println("Suave papu, palabra "+ctx.ID().getSymbol().getText()+" reservada");
+            return null;
+        }
+        if (res == null){
+            //si no es así, se inserta en la tabla de IDs
+
+            tablaIDs.insertar(ctx.ID().getSymbol(),tipo,ctx);
+            return null;
+        }
+        else{
+            System.out.println("Lo sentimos, la var/fun "+ctx.ID().getSymbol().getText()+" ya esta definida");
+            return null;
+        }
     }
 
     @Override
@@ -54,8 +73,14 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitExpressionAST(ParserUI.ExpressionASTContext ctx) {
-        visit(ctx.additionExpression());
-        visit(ctx.comparison());
+
+        int temp = (int)visit(ctx.additionExpression());
+
+
+        int temp2 = (int)visit(ctx.comparison());
+
+
+
         return null;
     }
 
@@ -68,9 +93,23 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitAdditionExpressionAST(ParserUI.AdditionExpressionASTContext ctx) {
-        visit(ctx.multiplicationExpression());
-        visit(ctx.additionFactor());
-        return null;
+
+        int t1 = (int)visit(ctx.multiplicationExpression());
+
+        int t2 = (int)visit(ctx.additionFactor());
+
+        if (t1 != t2){
+            System.out.println("Tipos incompatibles al realizar la OP de "+ctx.additionFactor().getText());
+            return -1;
+        }
+        else
+            if (t1 == 1){
+                return  t1;
+            }
+            else{
+                System.out.println("Son del mismo tipo, pero no son INTEGERS");
+                return -1;}
+
     }
 
     @Override
@@ -78,13 +117,29 @@ public class CheckerSB extends ParserUIBaseVisitor{
         for( ParserUI.MultiplicationExpressionContext ele : ctx.multiplicationExpression())
             visit(ele);
         return null;
+
+
     }
 
     @Override
     public Object visitMultiplicationExpressionAST(ParserUI.MultiplicationExpressionASTContext ctx) {
-        visit(ctx.elementExpression());
-        visit(ctx.multiplicationFactor());
-        return null;
+
+        int t1 = (int)visit(ctx.elementExpression());
+
+        int t2 = (int)visit(ctx.multiplicationFactor());
+
+        if (t1 != t2){
+            System.out.println("Tipos incompatibles al realizar la OP de "+ctx.multiplicationFactor().getText());
+            return -1;
+        }
+        else
+        if (t1 == 1){
+            return  t1;
+        }
+        else{
+            System.out.println("Son del mismo tipo, pero no son INTEGERS");
+            return -1;}
+
     }
 
     @Override
@@ -140,7 +195,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpFALSE(ParserUI.PExpFALSEContext ctx) {
-        return 4;
+        return 3;
     }
 
     @Override
@@ -188,27 +243,32 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitArrfunLEN(ParserUI.ArrfunLENContext ctx) {
-        return null;
+
+        return 4;
     }
 
     @Override
     public Object visitArrfunFIRST(ParserUI.ArrfunFIRSTContext ctx) {
-        return null;
+
+        return 4;
     }
 
     @Override
     public Object visitArrfunLAST(ParserUI.ArrfunLASTContext ctx) {
-        return null;
+
+        return 4;
     }
 
     @Override
     public Object visitArrfunREST(ParserUI.ArrfunRESTContext ctx) {
-        return null;
+
+        return 4;
     }
 
     @Override
     public Object visitArrfunPUSH(ParserUI.ArrfunPUSHContext ctx) {
-        return null;
+
+        return 4;
     }
 
     @Override
@@ -232,32 +292,29 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitMoreIdentifiersAST(ParserUI.MoreIdentifiersASTContext ctx) {
-        /*for( ParserUI.PExpIDContext ele : ctx)
-            visit(ele);*/
+        for( TerminalNode ele : ctx.ID())
+            visit(ele);
         return null;
     }
 
     @Override
     public Object visitHashLiteralAST(ParserUI.HashLiteralASTContext ctx) {
-        visit(ctx.LLIZQ());
         visit(ctx.hashContent());
         visit(ctx.moreHashContent());
-        visit(ctx.LLDER());
         return null;
     }
 
     @Override
     public Object visitHashContentAST(ParserUI.HashContentASTContext ctx) {
-        //visit(ctx.expression());
-        visit(ctx.DPTS());
-        //visit(ctx.expression());
+        for( ParserUI.ExpressionContext ele : ctx.expression())
+            visit(ele);
         return null;
     }
 
     @Override
     public Object visitMoreHashContentAST(ParserUI.MoreHashContentASTContext ctx) {
-        /*for( ParserUI.MoreHashContentContext ele : ctx.)
-            visit(ele);*/
+        for( ParserUI.HashContentContext ele : ctx.hashContent())
+            visit(ele);
         return null;
     }
 
@@ -283,10 +340,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPrintExpressionAST(ParserUI.PrintExpressionASTContext ctx) {
-        visit(ctx.PUTS());
-        visit(ctx.PIZQ());
         visit(ctx.expression());
-        visit(ctx.PDER());
         return null;
     }
 
