@@ -12,16 +12,24 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitProgramAST(ParserUI.ProgramASTContext ctx) {
-        for( ParserUI.StatementContext ele : ctx.statement())
+        tablaIDs.openScope();
+        for( ParserUI.StatementContext ele : ctx.statement()){
+
             visit(ele);
+            }
+        tablaIDs.closeScope();
         return null;
     }
 
     @Override
     public Object visitStatementLET(ParserUI.StatementLETContext ctx) {
-        tablaIDs.openScope();
+        System.out.println("asdakhsd");
+
+
         visit(ctx.letStatement());
-        tablaIDs.closeScope();
+        tablaIDs.imprimir();
+
+
         return null;
     }
 
@@ -40,7 +48,8 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitLetAST(ParserUI.LetASTContext ctx) {
         int tipo=-1;
-        tipo = (Integer) visit(ctx.expression());
+        System.out.println("Aqui pase... XD");
+        tipo = (int) visit(ctx.expression());
         // al igual que con las vars se debe buscar en la tabla de IDs para comprobar si la const ya existe
         IDTableKaio.Ident res = tablaIDs.buscar(ctx.ID().getText());
         if(tipo == 4){
@@ -51,6 +60,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
             //si no es así, se inserta en la tabla de IDs
 
             tablaIDs.insertar(ctx.ID().getSymbol(),tipo,ctx);
+            //visit(ctx.expression());
             return null;
         }
         else{
@@ -79,16 +89,17 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
         int temp2 = (int)visit(ctx.comparison());
 
-
-
-        return null;
+        if (temp == temp2)
+            return temp;
+        else
+            return -1;
     }
 
     @Override
     public Object visitComparisonAST(ParserUI.ComparisonASTContext ctx) {
         for( ParserUI.AdditionExpressionContext ele : ctx.additionExpression())
             visit(ele);
-        return null;
+        return -1;
     }
 
     @Override
@@ -97,13 +108,14 @@ public class CheckerSB extends ParserUIBaseVisitor{
         int t1 = (int)visit(ctx.multiplicationExpression());
 
         int t2 = (int)visit(ctx.additionFactor());
-
-        if (t1 != t2){
+        System.out.println("T1="+t1);
+        System.out.println("T2="+t2);
+        if ((t1 != t2) && (t2 != 0)){
             System.out.println("Tipos incompatibles al realizar la OP de "+ctx.additionFactor().getText());
             return -1;
         }
         else
-            if (t1 == 1){
+            if ((t1 >= 1) && (t2 == 0)){
                 return  t1;
             }
             else{
@@ -114,9 +126,20 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitAddfactorAST(ParserUI.AddfactorASTContext ctx) {
-        for( ParserUI.MultiplicationExpressionContext ele : ctx.multiplicationExpression())
-            visit(ele);
-        return null;
+        //System.out.println("hola?"+ctx.multiplicationExpression().size());
+        if (ctx.multiplicationExpression().size() == 0)
+            return 0;
+        int temp = (int)visit(ctx.multiplicationExpression(0)), temp2;
+        System.out.println("AF="+temp);
+        for (ParserUI.MultiplicationExpressionContext i:
+                ctx.multiplicationExpression()) {
+            temp2 = (int)visit(i);
+            System.out.println("AF2="+temp2);
+            if (temp != temp2) {
+                return -1;
+            }
+        }
+        return temp;
 
 
     }
@@ -128,32 +151,47 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
         int t2 = (int)visit(ctx.multiplicationFactor());
 
-        if (t1 != t2){
+        System.out.println("asd"+t1);
+        System.out.println("dsa"+t2);
+
+        if ((t1 != t2) && (t2 != 0)){
             System.out.println("Tipos incompatibles al realizar la OP de "+ctx.multiplicationFactor().getText());
             return -1;
         }
         else
-        if (t1 == 1){
-            return  t1;
-        }
-        else{
-            System.out.println("Son del mismo tipo, pero no son INTEGERS");
-            return -1;}
+            if ((t1 >= 1) && (t2 == 0)){
+                return  t1;
+            }
+            else{
+                System.out.println("Son del mismo tipo, pero no son INTEGERS");
+                return -1;}
 
     }
 
     @Override
     public Object visitMultifactorAST(ParserUI.MultifactorASTContext ctx) {
-        for( ParserUI.ElementExpressionContext ele : ctx.elementExpression())
-            visit(ele);
-        return null;
+       // System.out.println("hola2?"+ctx.elementExpression().size());
+        if (ctx.elementExpression().size() == 0)
+            return 0;
+        int temp = (int)visit(ctx.elementExpression(0)), temp2;
+        System.out.println("MF="+temp);
+        for (ParserUI.ElementExpressionContext i:
+                ctx.elementExpression()) {
+            temp2 = (int)visit(i);
+            System.out.println("MF2="+temp2);
+            if (temp != temp2) {
+                return -1;
+            }
+        }
+        return temp;
     }
 
     @Override
     public Object visitElementExpressionAST(ParserUI.ElementExpressionASTContext ctx) {
-        visit(ctx.primitiveExpression());
+        int i = (int) visit(ctx.primitiveExpression());
+        System.out.println("PE = "+i);
         //hacer los if de los otros 2 casos
-        return null;
+        return i;
     }
 
     @Override
