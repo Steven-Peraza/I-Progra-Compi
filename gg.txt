@@ -2,6 +2,6 @@
 
 let a = 3;
 
-let b = "asd";
+let b = 5;
 
-let c = false;
+let c = (a==b);

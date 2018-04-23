@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class CheckerSB extends ParserUIBaseVisitor{
     private IDTableKaio tablaIDs = null;
+    public static final int T_NULL = 0, T_ERROR = -1, T_INT = 1, T_STRING = 2, T_BOOLEAN = 3, T_ARRAY = 4;
     public CheckerSB(){
         this.tablaIDs=new IDTableKaio();
     }
@@ -13,6 +14,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitProgramAST(ParserUI.ProgramASTContext ctx) {
         tablaIDs.openScope();
+        //System.out.println("Jafeth + "+ ctx.statement().size());
         for( ParserUI.StatementContext ele : ctx.statement()){
 
             visit(ele);
@@ -24,7 +26,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitStatementLET(ParserUI.StatementLETContext ctx) {
         System.out.println("asdakhsd");
-
+        //System.out.println("LET + "+ ctx.getText());
 
         visit(ctx.letStatement());
         tablaIDs.imprimir();
@@ -86,20 +88,70 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
         int temp = (int)visit(ctx.additionExpression());
 
-
+        System.out.println("Texto en el expresion:"+ctx.getText());
         int temp2 = (int)visit(ctx.comparison());
 
-        if (temp == temp2)
+        if(temp2 == T_NULL)
+            return temp;
+        if(temp == T_ERROR || temp2== T_ERROR){
+            return T_ERROR;
+        }
+
+        else if(temp != temp2){
+            System.out.println("Tipos de operación incompatibles");
+            return T_ERROR;
+        }
+
+
+        else if (temp == temp2)
             return temp;
         else
-            return -1;
+            return T_ERROR;
     }
 
     @Override
     public Object visitComparisonAST(ParserUI.ComparisonASTContext ctx) {
-        for( ParserUI.AdditionExpressionContext ele : ctx.additionExpression())
-            visit(ele);
-        return -1;
+        if(ctx.additionExpression().size()==0) {
+            return T_NULL;
+        }
+        int type1 = (int)visit(ctx.additionExpression(0));
+        int type2;
+        if(ctx.additionExpression().size()==ctx.EQU().size()){
+            for(ParserUI.AdditionExpressionContext ele: ctx.additionExpression()){
+                type2 = (int)visit(ele);
+                if(type2 == T_ERROR){
+                    return T_ERROR;
+                }
+                else if(type2 == type1)
+                    continue;
+                else{
+                    System.out.println("Tipos no Comparables");
+                    return T_ERROR;
+                }
+
+            }
+            return type1;
+        }
+        else {
+            for (ParserUI.AdditionExpressionContext ele : ctx.additionExpression()) {
+            type2 = (int)visit(ele);
+            if(type2 == T_ERROR)
+                return T_ERROR;
+            else if(type1 != T_INT){
+                System.out.println("Solo se pueden hacer comparaciones "+ctx.children.get(0).toString()+" entre numeros");
+                return T_ERROR;
+            }
+            else if(type1 == type2){
+                continue;
+            }
+            else{
+                System.out.println("Tipos no comparables");
+                return T_ERROR;
+            }
+
+            }
+            return type1;
+        }
     }
 
     @Override
@@ -112,7 +164,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
         System.out.println("T2="+t2);
         if ((t1 != t2) && (t2 != 0)){
             System.out.println("Tipos incompatibles al realizar la OP de "+ctx.additionFactor().getText());
-            return -1;
+            return T_ERROR;
         }
         else
             if ((t1 >= 1) && (t2 == 0)){
@@ -120,7 +172,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
             }
             else{
                 System.out.println("Son del mismo tipo, pero no son INTEGERS");
-                return -1;}
+                return T_ERROR;}
 
     }
 
@@ -128,7 +180,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
     public Object visitAddfactorAST(ParserUI.AddfactorASTContext ctx) {
         //System.out.println("hola?"+ctx.multiplicationExpression().size());
         if (ctx.multiplicationExpression().size() == 0)
-            return 0;
+            return T_NULL;
         int temp = (int)visit(ctx.multiplicationExpression(0)), temp2;
         System.out.println("AF="+temp);
         for (ParserUI.MultiplicationExpressionContext i:
@@ -136,7 +188,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
             temp2 = (int)visit(i);
             System.out.println("AF2="+temp2);
             if (temp != temp2) {
-                return -1;
+                return T_ERROR;
             }
         }
         return temp;
@@ -156,7 +208,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
         if ((t1 != t2) && (t2 != 0)){
             System.out.println("Tipos incompatibles al realizar la OP de "+ctx.multiplicationFactor().getText());
-            return -1;
+            return T_ERROR;
         }
         else
             if ((t1 >= 1) && (t2 == 0)){
@@ -164,7 +216,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
             }
             else{
                 System.out.println("Son del mismo tipo, pero no son INTEGERS");
-                return -1;}
+                return T_ERROR;}
 
     }
 
@@ -172,7 +224,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
     public Object visitMultifactorAST(ParserUI.MultifactorASTContext ctx) {
        // System.out.println("hola2?"+ctx.elementExpression().size());
         if (ctx.elementExpression().size() == 0)
-            return 0;
+            return T_NULL;
         int temp = (int)visit(ctx.elementExpression(0)), temp2;
         System.out.println("MF="+temp);
         for (ParserUI.ElementExpressionContext i:
@@ -180,7 +232,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
             temp2 = (int)visit(i);
             System.out.println("MF2="+temp2);
             if (temp != temp2) {
-                return -1;
+                return T_ERROR;
             }
         }
         return temp;
@@ -188,6 +240,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitElementExpressionAST(ParserUI.ElementExpressionASTContext ctx) {
+        System.out.println("Primitive expression "+ctx.primitiveExpression());
         int i = (int) visit(ctx.primitiveExpression());
         System.out.println("PE = "+i);
         //hacer los if de los otros 2 casos
@@ -203,17 +256,17 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitCallExpressionAST(ParserUI.CallExpressionASTContext ctx) {
         visit(ctx.expressionList());
-        return null;
+        return T_NULL;
     }
 
     @Override
     public Object visitPExpNUM(ParserUI.PExpNUMContext ctx) {
-        return 1;
+        return T_INT;
     }
 
     @Override
     public Object visitPExpSTRING(ParserUI.PExpSTRINGContext ctx) {
-        return 2;
+        return T_STRING;
     }
 
     @Override
@@ -223,17 +276,17 @@ public class CheckerSB extends ParserUIBaseVisitor{
             return res.type;
         }
         else
-            return -1;
+            return T_ERROR;
     }
 
     @Override
     public Object visitPExpTRUE(ParserUI.PExpTRUEContext ctx) {
-        return 3;
+        return T_BOOLEAN;
     }
 
     @Override
     public Object visitPExpFALSE(ParserUI.PExpFALSEContext ctx) {
-        return 3;
+        return T_BOOLEAN;
     }
 
     @Override
@@ -282,31 +335,31 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitArrfunLEN(ParserUI.ArrfunLENContext ctx) {
 
-        return 4;
+        return T_ARRAY;
     }
 
     @Override
     public Object visitArrfunFIRST(ParserUI.ArrfunFIRSTContext ctx) {
 
-        return 4;
+        return T_ARRAY;
     }
 
     @Override
     public Object visitArrfunLAST(ParserUI.ArrfunLASTContext ctx) {
 
-        return 4;
+        return T_ARRAY;
     }
 
     @Override
     public Object visitArrfunREST(ParserUI.ArrfunRESTContext ctx) {
 
-        return 4;
+        return T_ARRAY;
     }
 
     @Override
     public Object visitArrfunPUSH(ParserUI.ArrfunPUSHContext ctx) {
 
-        return 4;
+        return T_ARRAY;
     }
 
     @Override
