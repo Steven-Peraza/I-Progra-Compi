@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class CheckerSB extends ParserUIBaseVisitor{
     private IDTableKaio tablaIDs = null;
-    public static final int T_NULL = 0, T_ERROR = -1, T_INT = 1, T_STRING = 2, T_BOOLEAN = 3, T_ARRAY = 4;
+    public static final int T_NULL = 0, T_ERROR = -1, T_INT = 1, T_STRING = 2, T_BOOLEAN = 3, T_ARRAY = 4,T_HASH = 5;
     public CheckerSB(){
         this.tablaIDs=new IDTableKaio();
     }
@@ -25,7 +25,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitStatementLET(ParserUI.StatementLETContext ctx) {
-        System.out.println("asdakhsd");
+        //System.out.println("asdakhsd");
         //System.out.println("LET + "+ ctx.getText());
 
         visit(ctx.letStatement());
@@ -49,7 +49,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitLetAST(ParserUI.LetASTContext ctx) {
-        int tipo=-1;
+        int tipo;
         System.out.println("Aqui pase... XD");
         tipo = (int) visit(ctx.expression());
         // al igual que con las vars se debe buscar en la tabla de IDs para comprobar si la const ya existe
@@ -93,7 +93,8 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
         if(temp2 == T_NULL)
             return temp;
-        if(temp == T_ERROR || temp2== T_ERROR){
+        else if(temp == T_ERROR || temp2== T_ERROR){
+            System.out.println("Que cansado2");
             return T_ERROR;
         }
 
@@ -105,8 +106,10 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
         else if (temp == temp2)
             return temp;
-        else
+        else {
+            System.out.println("Que cansado");
             return T_ERROR;
+        }
     }
 
     @Override
@@ -115,43 +118,17 @@ public class CheckerSB extends ParserUIBaseVisitor{
             return T_NULL;
         }
         int type1 = (int)visit(ctx.additionExpression(0));
-        int type2;
-        if(ctx.additionExpression().size()==ctx.EQU().size()){
+        boolean isAssignation = ctx.additionExpression().size() == ctx.EQU().size();
             for(ParserUI.AdditionExpressionContext ele: ctx.additionExpression()){
-                type2 = (int)visit(ele);
+                int type2 = (int)visit(ele);
                 if(type2 == T_ERROR){
                     return T_ERROR;
                 }
-                else if(type2 == type1)
-                    continue;
-                else{
+                else if(type2 != type1 || (!isAssignation && type1 != T_INT))
                     System.out.println("Tipos no Comparables");
                     return T_ERROR;
-                }
-
             }
-            return type1;
-        }
-        else {
-            for (ParserUI.AdditionExpressionContext ele : ctx.additionExpression()) {
-            type2 = (int)visit(ele);
-            if(type2 == T_ERROR)
-                return T_ERROR;
-            else if(type1 != T_INT){
-                System.out.println("Solo se pueden hacer comparaciones "+ctx.children.get(0).toString()+" entre numeros");
-                return T_ERROR;
-            }
-            else if(type1 == type2){
-                continue;
-            }
-            else{
-                System.out.println("Tipos no comparables");
-                return T_ERROR;
-            }
-
-            }
-            return type1;
-        }
+            return T_BOOLEAN;
     }
 
     @Override
@@ -206,12 +183,12 @@ public class CheckerSB extends ParserUIBaseVisitor{
         System.out.println("asd"+t1);
         System.out.println("dsa"+t2);
 
-        if ((t1 != t2) && (t2 != 0)){
+        if ((t1 != t2) && (t2 != T_NULL)){
             System.out.println("Tipos incompatibles al realizar la OP de "+ctx.multiplicationFactor().getText());
             return T_ERROR;
         }
         else
-            if ((t1 >= 1) && (t2 == 0)){
+            if ((t1 >= 1) && (t2 == T_NULL)){
                 return  t1;
             }
             else{
@@ -241,6 +218,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitElementExpressionAST(ParserUI.ElementExpressionASTContext ctx) {
         System.out.println("Primitive expression "+ctx.primitiveExpression());
+        System.out.println(ctx.primitiveExpression().getText());
         int i = (int) visit(ctx.primitiveExpression());
         System.out.println("PE = "+i);
         //hacer los if de los otros 2 casos
@@ -273,10 +251,11 @@ public class CheckerSB extends ParserUIBaseVisitor{
     public Object visitPExpID(ParserUI.PExpIDContext ctx) {
         IDTableKaio.Ident res = tablaIDs.buscar(ctx.ID().getText());
         if (res != null){
+            //System.out.println("tipo del primary expression "+res.type);
             return res.type;
         }
         else
-            return T_ERROR;
+            return T_NULL;
     }
 
     @Override
@@ -291,7 +270,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpEXPRESSION(ParserUI.PExpEXPRESSIONContext ctx) {
-        return (Integer) visit(ctx.expression());
+        return visit(ctx.expression());
     }
 
     @Override
@@ -418,14 +397,14 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitExpressionListNULLAST(ParserUI.ExpressionListNULLASTContext ctx) {
-        //visit(ctx.expression());
-        return null;
+        return T_NULL;
     }
 
     @Override
     public Object visitMoreExpressionsAST(ParserUI.MoreExpressionsASTContext ctx) {
-        /*for( ParserUI.MoreExpressionsContext ele : ctx.multiplicationExpression())
-            visit(ele);*/
+        for( ParserUI.ExpressionContext ele : ctx.expression()) {
+            visit(ele);
+        }
         return null;
     }
 
@@ -437,8 +416,9 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitIfExpressionAST(ParserUI.IfExpressionASTContext ctx) {
-        visit(ctx.expression());
-        //visit(ctx.blockStatement());
+        if((int)visit(ctx.expression())==T_BOOLEAN) {
+            //visit(ctx.blockStatement());
+        }else System.out.println("Boolean expression expected");
         return null;
     }
 
