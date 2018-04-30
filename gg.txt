@@ -12,3 +12,7 @@ if a<b {
 else{
     let e = true;
 }
+
+let f = ["asd","asd","ad"];
+
+let g = push(f);

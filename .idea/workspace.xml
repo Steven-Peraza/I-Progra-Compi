@@ -19,9 +19,11 @@
       <file leaf-file-name="CheckerSB.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Checker/CheckerSB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="112" column="0" lean-forward="true" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="219">
+              <caret line="243" column="30" lean-forward="true" selection-start-line="243" selection-start-column="30" selection-end-line="243" selection-end-column="30" />
+              <folding>
+                <element signature="e#13623#13632#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -29,8 +31,8 @@
       <file leaf-file-name="gg.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gg.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="18" lean-forward="false" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+            <state relative-caret-position="289">
+              <caret line="17" column="12" lean-forward="false" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -39,7 +41,7 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
+            <state relative-caret-position="272">
               <caret line="16" column="25" lean-forward="false" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -95,7 +97,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="x" value="676" />
     <option name="width" value="697" />
     <option name="height" value="735" />
@@ -289,7 +291,7 @@
     <option name="totallyTimeSpent" value="12179000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="676" y="0" width="697" height="735" extended-state="1" />
+    <frame x="676" y="0" width="697" height="735" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -301,7 +303,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33222038" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33222038" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -364,7 +366,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_91.jdk/Contents/Home/src.zip!/javax/swing/ImageIcon.java" />
     <entry file="file://$PROJECT_DIR$/src/textpademo/TPEditor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5385">
@@ -447,7 +448,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1033">
           <caret line="91" column="7" lean-forward="false" selection-start-line="91" selection-start-column="7" selection-end-line="91" selection-end-column="7" />
-          <folding />
+          <folding>
+            <element signature="e#13623#13632#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -647,17 +650,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/generated/ParserUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10353">
-          <caret line="682" column="47" lean-forward="false" selection-start-line="682" selection-start-column="47" selection-end-line="682" selection-end-column="47" />
-          <folding>
-            <element signature="e#20999#21000#0" expanded="false" />
-            <element signature="e#21060#21061#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/textpademo/TPEditor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5423">
@@ -685,16 +677,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="16" column="25" lean-forward="false" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Checker/IDTableKaio.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -703,19 +685,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$PROJECT_DIR$/antlr-runtime-4.7.1.jar!/org/antlr/v4/runtime/ParserRuleContext.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="189" column="43" lean-forward="false" selection-start-line="189" selection-start-column="43" selection-end-line="189" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/generated/ParserUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="944" column="64" lean-forward="true" selection-start-line="944" selection-start-column="64" selection-end-line="944" selection-end-column="64" />
+          <folding>
+            <element signature="e#29273#29274#0" expanded="true" />
+            <element signature="e#29333#29334#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="25" lean-forward="false" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gg.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="18" lean-forward="false" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+        <state relative-caret-position="289">
+          <caret line="17" column="12" lean-forward="false" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Checker/CheckerSB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="112" column="0" lean-forward="true" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="219">
+          <caret line="243" column="30" lean-forward="true" selection-start-line="243" selection-start-column="30" selection-end-line="243" selection-end-column="30" />
+          <folding>
+            <element signature="e#13623#13632#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -4,12 +4,15 @@ import generated.ParserUIBaseVisitor;
 import generated.ParserUI;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.util.LinkedList;
+
 public class CheckerSB extends ParserUIBaseVisitor{
     private IDTableKaio tablaIDs = null;
-    public static final int T_NULL = 0, T_ERROR = -1, T_INT = 1, T_STRING = 2, T_BOOLEAN = 3, T_ARRAY = 4, T_HASH = 5;
+    public static final int T_NULL = 0, T_ERROR = -1, T_INT = 1, T_STRING = 2, T_BOOLEAN = 3, T_ARRAY = 4, T_HASH = 5, T_RESER = 6;
     public CheckerSB(){
         this.tablaIDs=new IDTableKaio();
     }
+
 
     @Override
     public Object visitProgramAST(ParserUI.ProgramASTContext ctx) {
@@ -57,7 +60,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
         tipo = (int) visit(ctx.expression());
         // al igual que con las vars se debe buscar en la tabla de IDs para comprobar si la const ya existe
         IDTableKaio.Ident res = tablaIDs.buscar(ctx.ID().getText());
-        if(tipo == 4){
+        if(tipo == T_RESER){
             System.out.println("Suave papu, palabra "+ctx.ID().getSymbol().getText()+" reservada");
             return null;
         }
@@ -98,14 +101,16 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
         System.out.println("Texto en el expresion:"+ctx.getText());
         int temp2 = (int)visit(ctx.comparison());
-
+        System.out.println(temp);
+        System.out.println(temp2);
         if(temp2 == T_NULL)
             return temp;
         else if(temp == T_ERROR || temp2== T_ERROR){
             System.out.println("Que cansado2");
             return T_ERROR;
         }
-
+        else if (temp2 == T_BOOLEAN)
+            return T_BOOLEAN;
         else if(temp != temp2){
             System.out.println("Tipos de operación incompatibles");
             return T_ERROR;
@@ -126,17 +131,20 @@ public class CheckerSB extends ParserUIBaseVisitor{
             return T_NULL;
         }
         int type1 = (int)visit(ctx.additionExpression(0));
+        //System.out.println("C1="+type1);
         boolean isAssignation = ctx.additionExpression().size() == ctx.EQU().size();
-            for(ParserUI.AdditionExpressionContext ele: ctx.additionExpression()){
+        //System.out.println("ASS="+isAssignation);
+        for(ParserUI.AdditionExpressionContext ele: ctx.additionExpression()){
                 int type2 = (int)visit(ele);
+                System.out.println("C2="+type2);
                 if(type2 == T_ERROR){
                     return T_ERROR;
                 }
-                else if(type2 != type1 || (!isAssignation && type1 != T_INT))
+                else if(type2 != type1 || (!isAssignation && type1 != T_INT)){
                     System.out.println("Tipos no Comparables");
-                    return T_ERROR;
+                    return T_ERROR;}
             }
-            return T_BOOLEAN;
+        return T_BOOLEAN;
     }
 
     @Override
@@ -228,15 +236,38 @@ public class CheckerSB extends ParserUIBaseVisitor{
         //System.out.println("Primitive expression "+ctx.primitiveExpression());
         //System.out.println(ctx.primitiveExpression().getText());
         int i = (int) visit(ctx.primitiveExpression());
-        //System.out.println("PE = "+i);
-        //hacer los if de los otros 2 casos
+        //System.out.println("gg wp");
+        //int p = (int) visit(ctx.elementAccess());
+        //int o = (int) visit(ctx.callExpression());
+
+        /*if (p == T_INT){
+            if (i == T_ARRAY){
+                return T_NULL;
+            }
+            else
+            {
+                System.out.println("Se está tratando de accesar a un tipo que no es Array");
+                return T_ERROR;
+            }
+        }
+        else if (p != T_NULL){
+            System.out.println("Se requiere un tipo Integer para realziar indesxaciones");
+            return T_ERROR;
+        }
+*/
         return i;
     }
 
     @Override
     public Object visitElementAccessAST(ParserUI.ElementAccessASTContext ctx) {
-        visit(ctx.expression());
-        return null;
+        System.out.println("HOLA?");
+        Object temp = visit(ctx.expression());
+
+        if (temp == null) {
+            return T_NULL;
+        }
+        int tipo = (int)temp;
+        return tipo;
     }
 
     @Override
@@ -257,6 +288,9 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpID(ParserUI.PExpIDContext ctx) {
+        /*if (ctx.getRuleContext().toStringTree().contains("push")){
+            System.out.println("OOOOLLEEEE TORO!");
+            return T_ERROR;}*/
         IDTableKaio.Ident res = tablaIDs.buscar(ctx.ID().getText());
         if (res != null){
             //System.out.println("tipo del primary expression "+res.type);
@@ -283,22 +317,24 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpARRAYLITE(ParserUI.PExpARRAYLITEContext ctx) {
-        visit(ctx.arrayLiteral());
-        return null;
+        int tipo = (int)visit(ctx.arrayLiteral());
+        return tipo;
     }
 
     @Override
     public Object visitPExpARRAYFUNC(ParserUI.PExpARRAYFUNCContext ctx) {
         int asd;
-        visit(ctx.arrayFunctions());
-        asd = (Integer) visit(ctx.expressionList());
-        return null;
+        int reser = (int)visit(ctx.arrayFunctions());
+        if (reser == T_RESER)
+            return T_ARRAY;
+        asd = (int) visit(ctx.expressionList());
+        return T_ERROR;
     }
 
     @Override
     public Object visitPExpFUNCLITE(ParserUI.PExpFUNCLITEContext ctx) {
-        visit(ctx.functionLiteral());
-        return null;
+
+        return visit(ctx.functionLiteral());
     }
 
     @Override
@@ -322,37 +358,39 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitArrfunLEN(ParserUI.ArrfunLENContext ctx) {
 
-        return T_ARRAY;
+        return T_RESER;
     }
 
     @Override
     public Object visitArrfunFIRST(ParserUI.ArrfunFIRSTContext ctx) {
 
-        return T_ARRAY;
+        return T_RESER;
     }
 
     @Override
     public Object visitArrfunLAST(ParserUI.ArrfunLASTContext ctx) {
 
-        return T_ARRAY;
+        return T_RESER;
     }
 
     @Override
     public Object visitArrfunREST(ParserUI.ArrfunRESTContext ctx) {
 
-        return T_ARRAY;
+        return T_RESER;
     }
 
     @Override
     public Object visitArrfunPUSH(ParserUI.ArrfunPUSHContext ctx) {
 
-        return T_ARRAY;
+        return T_RESER;
     }
 
     @Override
     public Object visitArrayLiteralAST(ParserUI.ArrayLiteralASTContext ctx) {
-        visit(ctx.expressionList());
-        return null;
+        int tipo = (int) visit(ctx.expressionList());
+        if (tipo != T_ERROR)
+            return T_ARRAY;
+        return T_ERROR;
     }
 
     @Override
@@ -412,9 +450,25 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitExpressionListAST(ParserUI.ExpressionListASTContext ctx) {
-        visit(ctx.expression());
-        visit(ctx.moreExpressions());
-        return null;
+        LinkedList<Integer> paramList = new LinkedList<Integer>();
+        int t1 = (int)visit(ctx.expression());
+        Integer[] val = (Integer[]) visit(ctx.moreExpressions());
+        if(t1 != T_ERROR)
+            paramList.add(t1);
+        else
+            return T_ERROR;
+        for (int i = 0; i < val.length-1; i++) {
+            if (val[i] == T_ERROR)
+                return T_ERROR;
+            paramList.add(val[i]);
+        }
+
+        //ESTO POR SI SE OCUPA LA VAR GLOBAL DE LOS ELEMENTOS DE UN ARRAY...
+        /*Integer[] listaelementos = new Integer[paramList.size()];
+        listaelementos = paramList.toArray(listaelementos);
+        expressionList = listaelementos;
+        */
+        return T_ARRAY;
     }
 
     @Override
@@ -424,10 +478,14 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitMoreExpressionsAST(ParserUI.MoreExpressionsASTContext ctx) {
+        LinkedList<Integer> paramList2 = new LinkedList<Integer>();
         for( ParserUI.ExpressionContext ele : ctx.expression()) {
-            visit(ele);
+            int valor = (int) visit(ele);
+            paramList2.addLast(valor);
         }
-        return null;
+        Integer[] val2 = new Integer[paramList2.size()];
+        val2 = paramList2.toArray(val2);
+        return val2;
     }
 
     @Override
@@ -454,7 +512,8 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitIfExpressionAST(ParserUI.IfExpressionASTContext ctx) {
-        if(((int)visit(ctx.expression())==T_BOOLEAN) || (((int)visit(ctx.expression())==T_NULL))) {
+        int bool = (int)visit(ctx.expression());
+        if((bool ==T_BOOLEAN) || ((bool==T_NULL))) {
             if ((ctx.expression().toStringTree().contains("TRUE")) || (ctx.expression().toStringTree().contains("true"))){
                 System.out.println("Joder!");
                 return visit(ctx.blockStatement(0));
