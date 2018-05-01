@@ -88,7 +88,7 @@ public class IDTableKaio {
     {
         Ident temp=null;
         for(Ident id : this.tabla)
-            if (id.tok.getText().equals(nombre)) {
+            if ((id.tok.getText().equals(nombre)) && (id.nivel == nivelActual)) {
                 temp = id;
                 break;
             }

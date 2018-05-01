@@ -40,6 +40,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitStatementRETURN(ParserUI.StatementRETURNContext ctx) {
+        System.out.println("RETURN + "+ctx.getText());
         visit(ctx.returnStatement());
         return null;
         // Preguntar!!!!
