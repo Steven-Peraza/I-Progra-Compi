@@ -534,8 +534,12 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitBlockStatementAST(ParserUI.BlockStatementASTContext ctx) {
         System.out.println("GG IZI");
-        for( ParserUI.StatementContext ele : ctx.statement())
-            visit(ele);
+        tablaIDs.openScope();
+        for( ParserUI.StatementContext ele : ctx.statement()){
+            visit(ele);}
+        System.out.println("dentro del scope");
+        tablaIDs.imprimir();
+        tablaIDs.closeScope();
         return null;
     }
 
