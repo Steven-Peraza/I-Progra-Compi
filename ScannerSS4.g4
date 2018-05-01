@@ -31,6 +31,7 @@ FINCOME: '*/';
 //Asignaciones
 IF : 'if'|'IF';
 LET: 'let'|'LET';
+RETURN: 'return'|'RETURN';
 ELSE: 'else'|'ELSE';
 TRUE: 'true'|'TRUE';
 FALSE: 'false'|'FALSE';
@@ -39,7 +40,7 @@ FIRST: 'first'|'FIRST';
 LAST: 'last'|'LAST';
 REST: 'rest'|'REST';
 PUSH: 'push' |'PUSH';
-FUN: 'fun'|'FUN';
+FUN: 'fn'|'FN';
 PUTS: 'puts'|'PUTS';
 RETURN: 'return'|'RETURN';
 

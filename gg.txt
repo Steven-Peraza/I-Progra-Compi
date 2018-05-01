@@ -6,13 +6,15 @@ let b = 3;
 
 let c = a<b;
 
-if a<b {
-    let d = false;
-}
-else{
-    let e = true;
-}
+return b;
 
-let f = ["asd","asd","ad"];
+//let f = ["asd","asd","ad"];
 
-let g = push(f);
+/*return fn(a)
+{
+    let h= 2;
+};*/
+
+
+let asd = 0;
+
