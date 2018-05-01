@@ -1,4 +1,4 @@
-// Generated from C:/Users/Steven/Progra Compi/I-Progra-Compi\ParserUI.g4 by ANTLR 4.7
+// Generated from /Users/jafethvasquez/proyectosPersonales/PrograCompi/ParserUI.g4 by ANTLR 4.7
 package generated;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 

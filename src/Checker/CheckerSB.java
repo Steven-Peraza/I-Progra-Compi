@@ -17,7 +17,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitProgramAST(ParserUI.ProgramASTContext ctx) {
         tablaIDs.openScope();
-        //System.out.println("Jafeth + "+ ctx.statement().size());
+        System.out.println("Jafeth + "+ ctx.statement().size());
         for( ParserUI.StatementContext ele : ctx.statement()){
 
             visit(ele);
@@ -544,4 +544,6 @@ public class CheckerSB extends ParserUIBaseVisitor{
             visit(ele);
         return null;
     }
+
+
 }
