@@ -31,6 +31,7 @@ FINCOME: '*/';
 //Asignaciones
 IF : 'if'|'IF';
 LET: 'let'|'LET';
+RETURN: 'return'|'RETURN';
 ELSE: 'else'|'ELSE';
 TRUE: 'true'|'TRUE';
 FALSE: 'false'|'FALSE';
@@ -39,14 +40,13 @@ FIRST: 'first'|'FIRST';
 LAST: 'last'|'LAST';
 REST: 'rest'|'REST';
 PUSH: 'push' |'PUSH';
-FUN: 'fun'|'FUN';
+FUN: 'fn'|'FN';
 PUTS: 'puts'|'PUTS';
 
 
 
 ID: LETTER(LETTER|DIGIT)*;
 NUM: DIGIT DIGIT*;
-RETURN: 'return'|'RETURN';
 STRING: '"' CARAC*? '"';
 BOOL: TRUE | FALSE;
 CHAR: '\'' ( LETTER | DIGIT ) '\'';

@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 public class CheckerSB extends ParserUIBaseVisitor{
     private IDTableKaio tablaIDs = null;
-    public static final int T_NULL = 0, T_ERROR = -1, T_INT = 1, T_STRING = 2, T_BOOLEAN = 3, T_ARRAY = 4, T_HASH = 5, T_RESER = 6;
+    public static final int T_NULL = 0, T_ERROR = -1, T_INT = 1, T_STRING = 2, T_BOOLEAN = 3, T_ARRAY = 4, T_HASH = 5, T_RESER = 6, T_FUNC = 7;
     public CheckerSB(){
         this.tablaIDs=new IDTableKaio();
     }
@@ -29,7 +29,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitStatementLET(ParserUI.StatementLETContext ctx) {
         //System.out.println("asdakhsd");
-        //System.out.println("LET + "+ ctx.getText());
+        System.out.println("LET + "+ ctx.getText());
 
         visit(ctx.letStatement());
         tablaIDs.imprimir();
@@ -44,11 +44,12 @@ public class CheckerSB extends ParserUIBaseVisitor{
         return null;
         // Preguntar!!!!
         /*int tipo = (int) visit(ctx.returnStatement());
-        return tipo; */
+        return tipo;*/
     }
 
     @Override
     public Object visitStatementEXPRESSION(ParserUI.StatementEXPRESSIONContext ctx) {
+        System.out.println("EXP STATE + "+ ctx.getText());
         visit(ctx.expressionStatement());
         return null;
     }
@@ -82,7 +83,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
         /*int tipo;
         //System.out.println("Aqui pase... XD");
         tipo = (int) visit(ctx.expression());
-         ESTO POR SI ACASO...
+         //ESTO POR SI ACASO...
         return tipo;*/
         visit(ctx.expression());
         return null;
@@ -90,8 +91,8 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitExpressionStatementAST(ParserUI.ExpressionStatementASTContext ctx) {
-        visit(ctx.expression());
-        return null;
+
+        return visit(ctx.expression());
     }
 
     @Override
@@ -99,7 +100,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
         int temp = (int)visit(ctx.additionExpression());
 
-        System.out.println("Texto en el expresion:"+ctx.getText());
+        //System.out.println("Texto en el expresion:"+ctx.getText());
         int temp2 = (int)visit(ctx.comparison());
         System.out.println(temp);
         System.out.println(temp2);
@@ -291,9 +292,10 @@ public class CheckerSB extends ParserUIBaseVisitor{
         /*if (ctx.getRuleContext().toStringTree().contains("push")){
             System.out.println("OOOOLLEEEE TORO!");
             return T_ERROR;}*/
+        System.out.println("ID + "+ ctx.getText());
         IDTableKaio.Ident res = tablaIDs.buscar(ctx.ID().getText());
         if (res != null){
-            //System.out.println("tipo del primary expression "+res.type);
+            System.out.println("tipo del primary expression "+res.type);
             return res.type;
         }
         else
@@ -333,8 +335,8 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpFUNCLITE(ParserUI.PExpFUNCLITEContext ctx) {
-
-        return visit(ctx.functionLiteral());
+        System.out.println("Yo?");
+        return (int) visit(ctx.functionLiteral());
     }
 
     @Override
@@ -395,15 +397,18 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitFunctionLiteralAST(ParserUI.FunctionLiteralASTContext ctx) {
+        System.out.println("Hi?");
         visit(ctx.functionParameters());
+
+
         visit(ctx.blockStatement());
-        return null;
+        return T_FUNC;
     }
 
     @Override
     public Object visitFunctionParametersAST(ParserUI.FunctionParametersASTContext ctx) {
-        visit(ctx.moreIdentifiers());
-        return null;
+
+        return visit(ctx.moreIdentifiers());
     }
 
     @Override
@@ -523,11 +528,12 @@ public class CheckerSB extends ParserUIBaseVisitor{
                 return visit(ctx.blockStatement(1));
             }
         }else System.out.println("Boolean expression expected");
-        return null;
+        return T_ERROR;
     }
 
     @Override
     public Object visitBlockStatementAST(ParserUI.BlockStatementASTContext ctx) {
+        System.out.println("GG IZI");
         for( ParserUI.StatementContext ele : ctx.statement())
             visit(ele);
         return null;
