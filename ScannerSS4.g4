@@ -31,7 +31,6 @@ FINCOME: '*/';
 //Asignaciones
 IF : 'if'|'IF';
 LET: 'let'|'LET';
-RETURN: 'return'|'RETURN';
 ELSE: 'else'|'ELSE';
 TRUE: 'true'|'TRUE';
 FALSE: 'false'|'FALSE';
