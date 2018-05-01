@@ -57,7 +57,7 @@ public class IDTableKaio {
         Ident i = new Ident(nivelActual,token,tipo,declaracion);
         int j = 0;
         while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
-            if (this.tabla.get(j).tok.getText().equals(token.getText())) {
+            if (this.tabla.get(j).tok.getText().equals(token.getText())&& (nivelActual == tabla.get(j).nivel)) {
                 System.out.println("El identificador \"" + token.getText() + "\" ya ha sido declarado. Line " + token.getLine() + ":" + token.getCharPositionInLine());
                 return null;
             }
@@ -88,7 +88,7 @@ public class IDTableKaio {
     {
         Ident temp=null;
         for(Ident id : this.tabla)
-            if ((id.tok.getText().equals(nombre)) && (id.nivel == nivelActual)) {
+            if (id.tok.getText().equals(nombre)&& id.nivel==nivelActual) {
                 temp = id;
                 break;
             }
