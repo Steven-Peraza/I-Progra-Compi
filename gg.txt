@@ -8,12 +8,12 @@ let c = a<b;
 
 return b;
 
-//let f = ["asd","asd","ad"];
+let f = ["asd","asd","ad"];
 
-/*return fn(a)
+let algo = fn(a)
 {
-    let h= 2;
-};*/
+    return 2;
+};
 
 
 let asd = 0;

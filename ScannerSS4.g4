@@ -42,7 +42,7 @@ REST: 'rest'|'REST';
 PUSH: 'push' |'PUSH';
 FUN: 'fn'|'FN';
 PUTS: 'puts'|'PUTS';
-RETURN: 'return'|'RETURN';
+
 
 
 ID: LETTER(LETTER|DIGIT)*;

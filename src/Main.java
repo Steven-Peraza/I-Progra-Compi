@@ -31,7 +31,7 @@ public class Main {
 
         try {
             ParseTree tree = parser.program();
-            CheckerSB v=new CheckerSB();
+            CheckerSB v = new CheckerSB();
             v.visit(tree);
             System.out.println("Compilación Exitosa!!\n");
     }
