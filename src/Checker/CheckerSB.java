@@ -40,6 +40,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitStatementRETURN(ParserUI.StatementRETURNContext ctx) {
+        System.out.println("RETURN + "+ctx.getText());
         visit(ctx.returnStatement());
         return null;
         // Preguntar!!!!
@@ -242,14 +243,18 @@ public class CheckerSB extends ParserUIBaseVisitor{
     public Object visitElementExpressionAST(ParserUI.ElementExpressionASTContext ctx) {
         //System.out.println("Primitive expression "+ctx.primitiveExpression());
         //System.out.println(ctx.primitiveExpression().getText());
+        IDTableKaio.Ident res = tablaIDs.buscar(ctx.primitiveExpression().getText());
         int i = (int) visit(ctx.primitiveExpression());
-        //int i2 = (int) visit(ctx.primitiveExpression());
         System.out.println("gg wp"+i);
         int p = T_NULL ,o = T_NULL;
-        if ((ctx.getText().contains("[")) && (i != T_ARRAY)){
+        if ((ctx.elementAccess() != null) && (res != null)){
             System.out.println("gasf"+ctx.getText());
             p = (int) visit(ctx.elementAccess());}
-        if ((ctx.getText().contains("(")) && (i != T_ARRAY) && (i != T_FUNC)){
+        else
+        {
+            System.out.println("Estais tratando de acceder a una variable no definida...");
+        }
+        if ((ctx.callExpression() != null) && (res != null)){
             o = (int) visit(ctx.callExpression());}
 
         if (p == T_INT){
