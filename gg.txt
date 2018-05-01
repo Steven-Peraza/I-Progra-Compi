@@ -6,9 +6,13 @@ let b = 3;
 
 let c = a<b;
 
-return b;
+//return b;
 
-//let f = ["asd","asd","ad"];
+let f = ["asd","asd","ad"];
+
+let k = o[2];
+
+//let l = f[2];
 
 /*return fn(a)
 {

@@ -237,12 +237,18 @@ public class CheckerSB extends ParserUIBaseVisitor{
         //System.out.println("Primitive expression "+ctx.primitiveExpression());
         //System.out.println(ctx.primitiveExpression().getText());
         int i = (int) visit(ctx.primitiveExpression());
-        //System.out.println("gg wp");
-        //int p = (int) visit(ctx.elementAccess());
-        //int o = (int) visit(ctx.callExpression());
+        //int i2 = (int) visit(ctx.primitiveExpression());
+        System.out.println("gg wp"+i);
+        int p = T_NULL ,o = T_NULL;
+        if ((ctx.getText().contains("[")) && (i != T_ARRAY)){
+            System.out.println("gasf"+ctx.getText());
+            p = (int) visit(ctx.elementAccess());}
+        if ((ctx.getText().contains("(")) && (i != T_ARRAY) && (i != T_FUNC)){
+            o = (int) visit(ctx.callExpression());}
 
-        /*if (p == T_INT){
+        if (p == T_INT){
             if (i == T_ARRAY){
+                System.out.println("Lo hice?");
                 return T_NULL;
             }
             else
@@ -252,10 +258,10 @@ public class CheckerSB extends ParserUIBaseVisitor{
             }
         }
         else if (p != T_NULL){
-            System.out.println("Se requiere un tipo Integer para realziar indesxaciones");
+            System.out.println("Se requiere un tipo Integer para realizar indexaciones");
             return T_ERROR;
         }
-*/
+
         return i;
     }
 
