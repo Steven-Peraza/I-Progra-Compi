@@ -41,12 +41,11 @@ REST: 'rest'|'REST';
 PUSH: 'push' |'PUSH';
 FUN: 'fun'|'FUN';
 PUTS: 'puts'|'PUTS';
-
+RETURN: 'return'|'RETURN';
 
 
 ID: LETTER(LETTER|DIGIT)*;
 NUM: DIGIT DIGIT*;
-RETURN: 'return'|'RETURN';
 STRING: '"' CARAC*? '"';
 BOOL: TRUE | FALSE;
 CHAR: '\'' ( LETTER | DIGIT ) '\'';
