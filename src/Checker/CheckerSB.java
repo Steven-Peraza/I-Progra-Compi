@@ -117,20 +117,12 @@ public class CheckerSB extends ParserUIBaseVisitor{
             System.out.println("Que cansado2");
             return T_ERROR;
         }
-        else if (temp2 == T_BOOLEAN)
-            return T_BOOLEAN;
         else if(temp != temp2){
             System.out.println("Tipos de operación incompatibles");
             return T_ERROR;
         }
-
-
-        else if (temp == temp2)
-            return temp;
-        else {
-            System.out.println("Que cansado");
-            return T_ERROR;
-        }
+        else
+            return T_BOOLEAN;
     }
 
     @Override
@@ -152,7 +144,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
                     System.out.println("Tipos no Comparables");
                     return T_ERROR;}
             }
-        return T_BOOLEAN;
+        return type1;
     }
 
     @Override
