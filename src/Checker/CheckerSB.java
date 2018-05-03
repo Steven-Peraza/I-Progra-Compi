@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 public class CheckerSB extends ParserUIBaseVisitor{
     private IDTableKaio tablaIDs = null;
-    public static final int T_NULL = 0, T_ERROR = -1, T_INT = 1, T_STRING = 2, T_BOOLEAN = 3, T_ARRAY = 4, T_HASH = 5, T_RESER = 6, T_FUNC = 7;
+    public static final int T_NULL = 0, T_ERROR = -1, T_INT = 1, T_STRING = 2, T_BOOLEAN = 3, T_ARRAY = 4, T_HASH = 5, T_RESER = 6, T_FUNC = 7,T_PARAM=8;
     public CheckerSB(){
         this.tablaIDs=new IDTableKaio();
     }
@@ -57,9 +57,15 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitLetAST(ParserUI.LetASTContext ctx) {
-        int tipo;
+        int tipo = -1;
         //System.out.println("Aqui pase... XD");
-        tipo = (int) visit(ctx.expression());
+        if(ctx.ID()!=null) {
+            tipo = (int) visit(ctx.expression());
+        }
+        else{
+            System.out.println("No hay ID");
+            return T_ERROR;
+        }
         // al igual que con las vars se debe buscar en la tabla de IDs para comprobar si la const ya existe
         IDTableKaio.Ident res = tablaIDs.buscar(ctx.ID().getText());
         if(tipo == T_RESER){
@@ -111,20 +117,12 @@ public class CheckerSB extends ParserUIBaseVisitor{
             System.out.println("Que cansado2");
             return T_ERROR;
         }
-        else if (temp2 == T_BOOLEAN)
-            return T_BOOLEAN;
         else if(temp != temp2){
             System.out.println("Tipos de operación incompatibles");
             return T_ERROR;
         }
-
-
-        else if (temp == temp2)
-            return temp;
-        else {
-            System.out.println("Que cansado");
-            return T_ERROR;
-        }
+        else
+            return T_BOOLEAN;
     }
 
     @Override
@@ -146,7 +144,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
                     System.out.println("Tipos no Comparables");
                     return T_ERROR;}
             }
-        return T_BOOLEAN;
+        return type1;
     }
 
     @Override
@@ -428,23 +426,46 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitFunctionLiteralAST(ParserUI.FunctionLiteralASTContext ctx) {
         System.out.println("Hi?");
+        tablaIDs.openScope();
         visit(ctx.functionParameters());
 
 
         visit(ctx.blockStatement());
+        tablaIDs.closeScope();
         return T_FUNC;
     }
 
     @Override
     public Object visitFunctionParametersAST(ParserUI.FunctionParametersASTContext ctx) {
-
+        IDTableKaio.Ident id = tablaIDs.buscar(ctx.ID().getText());
+        if(id != null){
+            if(id.type == T_RESER){
+                System.out.println("Parametro con identificador invalido, palabra reservada");
+            }
+            System.out.println("Esta variable ya existe");
+            return null;
+        }
+        else{
+            tablaIDs.insertar(ctx.ID().getSymbol(),T_PARAM,ctx);
+        }
         return visit(ctx.moreIdentifiers());
     }
 
     @Override
     public Object visitMoreIdentifiersAST(ParserUI.MoreIdentifiersASTContext ctx) {
-        for( TerminalNode ele : ctx.ID())
-            visit(ele);
+        IDTableKaio.Ident id;
+        for( TerminalNode ele : ctx.ID()) {
+            id = tablaIDs.buscar(ele.getText());
+            if (id != null) {
+                if (id.type == T_RESER) {
+                    System.out.println("Parametro con identificador invalido, palabra reservada");
+                }
+                System.out.println("Parametro con identificador invalido");
+                return null;
+            } else {
+                tablaIDs.insertar(ele.getSymbol(), T_PARAM, ctx);
+            }
+        }
         return null;
     }
 
@@ -564,12 +585,12 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitBlockStatementAST(ParserUI.BlockStatementASTContext ctx) {
         System.out.println("GG IZI");
-        tablaIDs.openScope();
+        //tablaIDs.openScope();
         for( ParserUI.StatementContext ele : ctx.statement()){
             visit(ele);}
         System.out.println("dentro del scope");
         tablaIDs.imprimir();
-        tablaIDs.closeScope();
+        //tablaIDs.closeScope();
         return null;
     }
 
