@@ -237,22 +237,38 @@ public class CheckerSB extends ParserUIBaseVisitor{
     public Object visitElementExpressionAST(ParserUI.ElementExpressionASTContext ctx) {
         //System.out.println("Primitive expression "+ctx.primitiveExpression());
         //System.out.println(ctx.primitiveExpression().getText());
+
         IDTableKaio.Ident res = tablaIDs.buscar(ctx.primitiveExpression().getText());
         int i = (int) visit(ctx.primitiveExpression());
-        System.out.println("gg wp"+i);
+        System.out.println("gg wp "+i);
+        System.out.println("res "+res);
         int p = T_NULL ,o = T_NULL;
         if ((ctx.elementAccess() != null) && (res != null)){
-            System.out.println("gasf"+ctx.getText());
-            p = (int) visit(ctx.elementAccess());}
-        else
+            System.out.println("gasf "+ctx.getText());
+            p = (int) visit(ctx.elementAccess());
+            if (p == T_INT){
+                if ((i == T_ARRAY) || (i == T_HASH)){
+                    System.out.println("Lo hice?");
+                    return T_NULL;
+                }
+                else
+                {
+                    System.out.println("Se está tratando de accesar a un tipo que no es Array");
+                    return T_ERROR;
+                }
+            }
+            else if (p != T_NULL){
+                System.out.println("Se requiere un tipo Integer para realizar indexaciones");
+                return T_ERROR;
+            }
+        }
+        else if ((ctx.elementAccess() != null) && (res == null))
         {
             System.out.println("Estais tratando de acceder a una variable no definida...");
         }
         if ((ctx.callExpression() != null) && (res != null)){
-            o = (int) visit(ctx.callExpression());}
-
-        if (p == T_INT){
-            if (i == T_ARRAY){
+            o = (int) visit(ctx.callExpression());
+            if (o == 8){
                 System.out.println("Lo hice?");
                 return T_NULL;
             }
@@ -261,11 +277,14 @@ public class CheckerSB extends ParserUIBaseVisitor{
                 System.out.println("Se está tratando de accesar a un tipo que no es Array");
                 return T_ERROR;
             }
+
+
         }
-        else if (p != T_NULL){
-            System.out.println("Se requiere un tipo Integer para realizar indexaciones");
-            return T_ERROR;
+        else if ((ctx.callExpression() != null) && (res == null))
+        {
+            System.out.println("Estais tratando de acceder a una funcion no definida...");
         }
+
 
         return i;
     }
