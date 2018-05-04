@@ -5,20 +5,17 @@ let b = 3;
 
 let c = a<b;
 
-return b;
 
 let f = ["asd","asd","ad"];
 
-//let k = o[2];
+let k = {1:2};
 
-let l = f[2];
+let l = b["asd"];
 
 
-/*let algo = fn(a)
+let algo = fn(k,y,p)
 {
     let a =5 ;
 };
 
-
-let asd = 0;*/
-
+k(1);

@@ -16,13 +16,14 @@ public class IDTableKaio {
         Token tok;
         int type; //forma simple de identificar un tipo del lenguaje [0--> Entero] NO ES TAN CECESARIO EN ESTE LENGUAJE ALPHA PUESTO QUE SOLO ACEPTA NUMEROS
         ParserRuleContext decl; //por si fuera necesario saber más acerca del contexto del identificador en el árbol
+        int param;
 
-
-        public Ident(int n, Token t, int ty, ParserRuleContext d) {
+        public Ident(int n, Token t, int ty, ParserRuleContext d, int p) {
             nivel = n;
             tok = t;
             type = ty;
             decl = d;
+            param = p;
         }
 
         public String toString(){
@@ -39,7 +40,7 @@ public class IDTableKaio {
     public Ident insertar(String nombre, int tipo, ParserRuleContext declaracion)
     {
         Token token = new CommonToken(0,nombre);
-        Ident i = new Ident(nivelActual,token,tipo,declaracion);
+        Ident i = new Ident(nivelActual,token,tipo,declaracion,0);
         int j = 0;
         while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
             if (this.tabla.get(j).tok.getText().equals(nombre)) {
@@ -54,7 +55,23 @@ public class IDTableKaio {
 
     public Ident insertar(Token token, int tipo, ParserRuleContext declaracion)
     {
-        Ident i = new Ident(nivelActual,token,tipo,declaracion);
+        Ident i = new Ident(nivelActual,token,tipo,declaracion,0);
+        int j = 0;
+        while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
+            if (this.tabla.get(j).tok.getText().equals(token.getText())&& (nivelActual == tabla.get(j).nivel)) {
+                System.out.println("El identificador \"" + token.getText() + "\" ya ha sido declarado. Line " + token.getLine() + ":" + token.getCharPositionInLine());
+                return null;
+            }
+            j++;
+        }
+        tabla.push(i); //deben ser una tabla estilo pila
+        return this.tabla.get(0);
+
+    }
+
+    public Ident insertar(Token token, int tipo, ParserRuleContext declaracion,int parametros)
+    {
+        Ident i = new Ident(nivelActual,token,tipo,declaracion,parametros);
         int j = 0;
         while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
             if (this.tabla.get(j).tok.getText().equals(token.getText())&& (nivelActual == tabla.get(j).nivel)) {
