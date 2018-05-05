@@ -112,6 +112,26 @@ public class IDTableKaio {
         return temp;
     }
 
+    public Ident buscarAcceso(String nombre)
+    {
+        Ident scopeActual = null;
+        Ident scopeGlobal = null;
+        for(Ident id : this.tabla) {
+            if (id.tok.getText().equals(nombre) && id.nivel == nivelActual) {
+                scopeActual = id;
+                break;
+            } else if (id.tok.getText().equals(nombre) && id.nivel == 1) {
+                scopeGlobal = id;
+            }
+        }
+        if(scopeActual != null){
+            return scopeActual;
+        }
+        else{
+            return scopeGlobal;
+        }
+    }
+
     public void imprimir() {
         System.out.println("****** ESTADO DE TABLA DE SÍMBOLOS ******");
         if (!this.tabla.isEmpty()) {

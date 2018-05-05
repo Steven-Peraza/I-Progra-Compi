@@ -10,12 +10,22 @@ let f = ["asd","asd","ad"];
 
 let k = {1:2};
 
-let l = b["asd"];
+let p = [3+2,4,5,6]
 
+let l = 5==4<6;
+//4<5<"fds"
+
+//let l = "fsad"
 
 let algo = fn(k,y,p)
 {
-    let a =5 ;
+
+    //let r = 7*k[3];
+    //let f = "queso" * "fresa";
+    if(p==y){
+        //2+"dsdfs"
+    }
+    f[2+3]
 };
 
-k(1);
+algo(1,2,3);
