@@ -18,6 +18,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
     ;
 
     public int param = 0;
+    public int fReturnType = T_RESER;
     public CheckerSB(){
         this.tablaIDs=new IDTableKaio();
     }
@@ -64,6 +65,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitLetAST(ParserUI.LetASTContext ctx) {
         int tipo = -1;
+        fReturnType = T_RESER;
         if(ctx.ID()!=null) {
             tipo = (int) visit(ctx.expression());
             if(tipo == T_ERROR){
@@ -79,11 +81,11 @@ public class CheckerSB extends ParserUIBaseVisitor{
         IDTableKaio.Ident res = tablaIDs.buscar(ctx.ID().getText());
         if(tipo == T_RESER){
             //System.out.println();
-            imprimirError("El ID:  "+ctx.ID().getSymbol().getText()+" es una palabra reservada", ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            imprimirError("No puede asignarle a una variable una función sin retorno", ctx.start.getLine(),ctx.start.getCharPositionInLine());
             return T_ERROR;
         }
         if (res == null){
-            tablaIDs.insertar(ctx.ID().getSymbol(),tipo,ctx,param);
+            tablaIDs.insertar(ctx.ID().getSymbol(),tipo,ctx,param,fReturnType);
             return T_RESER;
         }
         else{
@@ -95,9 +97,8 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
     @Override
     public Object visitReturnAST(ParserUI.ReturnASTContext ctx) {
-
-        int state = (int)visit(ctx.expression());
-        return state;
+        System.out.println(visit(ctx.expression()));
+        return visit(ctx.expression());
     }
 
     @Override
@@ -278,11 +279,11 @@ public class CheckerSB extends ParserUIBaseVisitor{
         }
         if ((ctx.callExpression() != null) && (res != null)){
             o = (int) visit(ctx.callExpression());
-            if (res.type == T_FUNC) {
+            if (res.type == T_FUNC || res.type == T_NEUTRO) {
                 //System.out.println(res.type);
-                if (o == res.param) {
+                if (o == res.param || res.type == T_NEUTRO) {
                     if (i == T_FUNC) {
-                        return T_RESER;
+                        return res.returnType;
                     }
                 }
                 else {
@@ -449,6 +450,9 @@ public class CheckerSB extends ParserUIBaseVisitor{
         tablaIDs.closeScope();
         if(state == T_ERROR)
             return T_ERROR;
+        if(state != T_RESER){
+            fReturnType = state;
+        }
         return T_FUNC;
     }
 
@@ -610,13 +614,17 @@ public class CheckerSB extends ParserUIBaseVisitor{
     @Override
     public Object visitBlockStatementAST(ParserUI.BlockStatementASTContext ctx) {
         int state = -1;
+        int returnType = T_RESER;
         for( ParserUI.StatementContext ele : ctx.statement()){
             state = (int)visit(ele);
+            if(ele.getChild(0).getText().toLowerCase().contains("return")){
+                returnType = state;
+            }
             if(state == T_ERROR)
                 return T_ERROR;
         }
         //tablaIDs.imprimir();
-        return T_RESER;
+        return returnType;
     }
 
     public void imprimirError(String msg, int line, int position){

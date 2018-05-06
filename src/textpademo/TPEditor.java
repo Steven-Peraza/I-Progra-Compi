@@ -485,11 +485,13 @@ public class TPEditor {
         //se configura con un BoxLayout
         console.setLayout(new BoxLayout(console, BoxLayout.Y_AXIS));
         // le añade un borde compuesto
+        ScrollPane pane = new ScrollPane();
         console.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLoweredBevelBorder(),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         consoleTxt = new JTextArea();
-        console.add(consoleTxt);
+        pane.add(consoleTxt);
+        console.add(pane);
 
 
 
