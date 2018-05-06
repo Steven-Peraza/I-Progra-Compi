@@ -91,8 +91,12 @@ public class CheckerSB extends ParserUIBaseVisitor{
         }
         else{
             //System.out.println("Lo sentimos, la var/fun "+ctx.ID().getSymbol().getText()+" ya esta definida");
-            imprimirError("La variable  "+ctx.ID().getSymbol().getText()+" ya existe en el contexto actual", ctx.start.getLine(),ctx.start.getCharPositionInLine());
-            return T_ERROR;
+            if(res.type == T_FUNC){
+                imprimirError("No se puede cambiar el valor a una función",ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            }else{
+                res.type = tipo;
+            }
+            return T_RESER;
         }
     }
 
