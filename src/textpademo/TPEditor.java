@@ -146,7 +146,8 @@ public class TPEditor {
         //c.add(statusBar, BorderLayout.CENTER);
         c.add(console,BorderLayout.SOUTH);//añade la barra de estado, orientación SUR
         console.add(statusBar);
-        PrintStream printStream = new PrintStream(new CustomOutputStream(getConsoleTxt()));
+        CustomOutputStream output = new CustomOutputStream(getConsoleTxt());
+        PrintStream printStream = new PrintStream(output);
         System.setOut(printStream);
         System.setErr(printStream);
 

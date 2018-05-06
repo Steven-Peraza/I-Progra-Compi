@@ -37,7 +37,7 @@ public class ActionPerformer {
 
     private final TPEditor tpEditor;    //instancia de TPEditor (la clase principal)
     private String lastSearch = "";     //la última búsqueda de texto realizada, por defecto no contiene nada
-    private static java.util.concurrent.Future <JFrame> treeGUI;
+    //private static java.util.concurrent.Future <JFrame> treeGUI;
     /**
      * Constructor de la clase.
      *
@@ -443,7 +443,7 @@ public class ActionPerformer {
                 System.out.println("Compilacion Fallida");
             }
         }
-        catch(RecognitionException e){
+        catch(Exception e){
             System.out.println("Compilación Fallida!!");
         }
     }
@@ -455,6 +455,7 @@ public class ActionPerformer {
      */
     public void actionAST() {
         actionSave();
+        tpEditor.getConsoleTxt().setText(" ");
         ScannerSS4 inst = null;
         ParserUI parser = null;
         ANTLRInputStream input=null;
@@ -462,12 +463,12 @@ public class ActionPerformer {
         try {
             input = new ANTLRInputStream(new FileReader(tpEditor.getCurrentFile()));
             inst = new ScannerSS4(input);
-            //inst.removeErrorListeners();
-            //inst.addErrorListener(ThrowingErrorListener.INSTANCE);
+            inst.removeErrorListeners();
+            inst.addErrorListener(ThrowingErrorListener.INSTANCE);
             tokens = new CommonTokenStream(inst);
             parser = new ParserUI(tokens);
-            //parser.removeErrorListeners();
-            //parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+            parser.removeErrorListeners();
+            parser.addErrorListener(ThrowingErrorListener.INSTANCE);
             ParseTree tree = parser.program();
 
             //show AST in console
@@ -517,7 +518,7 @@ public class ActionPerformer {
     /**
      * Retorna la ruta de la ubicación de un archivo en forma reducida.
      *
-     * @param longpath la ruta de un archivo
+     * @param  la ruta de un archivo
      * @return la ruta reducida del archivo
      */
     private static String shortPathName(String longPath) {

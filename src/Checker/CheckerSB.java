@@ -75,14 +75,14 @@ public class CheckerSB extends ParserUIBaseVisitor{
         }
         else{
             //System.out.println("No hay ID");
-            imprimirError("Se esperaba un ID y no se encontró", ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            imprimirError("Se esperaba un ID y no se encontro", ctx.start.getLine(),ctx.start.getCharPositionInLine());
             return T_ERROR;
         }
         // al igual que con las vars se debe buscar en la tabla de IDs para comprobar si la const ya existe
         IDTableKaio.Ident res = tablaIDs.buscar(ctx.ID().getText());
         if(tipo == T_RESER){
             //System.out.println();
-            imprimirError("No puede asignarle a una variable una función sin retorno", ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            imprimirError("No puede asignarle a una variable una funcion sin retorno", ctx.start.getLine(),ctx.start.getCharPositionInLine());
             return T_ERROR;
         }
         if (res == null){
@@ -92,7 +92,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
         else{
             //System.out.println("Lo sentimos, la var/fun "+ctx.ID().getSymbol().getText()+" ya esta definida");
             if(res.type == T_FUNC){
-                imprimirError("No se puede cambiar el valor a una función",ctx.start.getLine(),ctx.start.getCharPositionInLine());
+                imprimirError("No se puede cambiar el valor a una funcion",ctx.start.getLine(),ctx.start.getCharPositionInLine());
             }else{
                 res.type = tipo;
             }
@@ -280,7 +280,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
                 }
             }
             else{
-                //System.out.println("Se está tratando de accesar a un tipo que no es Array o Hash");
+                imprimirError("Se esta tratando de accesar a un tipo que no es Array o Hash", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
         }

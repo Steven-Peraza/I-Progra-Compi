@@ -1,10 +1,13 @@
 import Checker.CheckerSB;
 import generated.*;
+import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 import java.io.FileReader;
 import textpademo.ThrowingErrorListener;
+
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JFrame;
 
@@ -40,13 +43,15 @@ public class Main {
             int state = (int)v.visit(tree);
             //System.out.println(state);
             if(state != -1) {
-                System.out.println("Compilación Exitosa!!\n");
+                System.out.println("Compilacion Exitosa!!\n");
+                TreeViewer viewr = new TreeViewer(Arrays.asList(parser.getRuleNames()),tree);
+                viewr.open();
             }else{
                 System.out.println("Compilacion Fallida");
             }
     }
         catch(RecognitionException e){
-        System.out.println("Compilación Fallida!!");
+        System.out.println("Compilacion Fallida!!");
     }
 }
 
