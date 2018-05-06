@@ -2,6 +2,7 @@ package textpademo;
 
 import generated.ParserUI;
 import generated.ScannerSS4;
+import Checker.CheckerSB;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -160,7 +161,7 @@ public class ActionPerformer {
                 //escribe desde el flujo de datos hacia el archivo
                 tpEditor.getJTextArea().write(bw);
                 bw.close();    //cierra el flujo
-                System.out.println("Por aki pase... XD");
+                //System.out.println("Por aki pase... XD");
                 //marca el estado del documento como no modificado
                 tpEditor.setDocumentChanged(false);
             } catch (IOException ex) {    //en caso de que ocurra una excepción
@@ -423,17 +424,27 @@ public class ActionPerformer {
             parser = new ParserUI(tokens);
             parser.removeErrorListeners();
             parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-            /*FALTAN LOS ERRORES*/
+
+            //java.util.concurrent.Future <JFrame> treeGUI = org.antlr.v4.gui.Trees.inspect(tree,parser);
+            //treeGUI.get().setVisible(true);
         }
         catch(Exception e){System.out.println("No hay archivo");}
 
-
         try {
+            //System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+            tpEditor.getConsoleTxt().setText(" ");
             ParseTree tree = parser.program();
-            System.out.println("Compilacion Exitosa!!\n");
+            CheckerSB v = new CheckerSB();
+            int state = (int)v.visit(tree);
+            //System.out.println(state);
+            if(state != -1) {
+                System.out.println("Compilacion Exitosa!!\n");
+            }else{
+                System.out.println("Compilacion Fallida");
+            }
         }
-        catch(ParseCancellationException e){
-            System.out.println("Compilacion Fallida!!");
+        catch(RecognitionException e){
+            System.out.println("Compilación Fallida!!");
         }
     }
 

@@ -17,13 +17,16 @@ public class IDTableKaio {
         int type; //forma simple de identificar un tipo del lenguaje [0--> Entero] NO ES TAN CECESARIO EN ESTE LENGUAJE ALPHA PUESTO QUE SOLO ACEPTA NUMEROS
         ParserRuleContext decl; //por si fuera necesario saber más acerca del contexto del identificador en el árbol
         int param;
+        int returnType;
 
-        public Ident(int n, Token t, int ty, ParserRuleContext d, int p) {
+        public Ident(int n, Token t, int ty, ParserRuleContext d, int p, int returnType) {
             nivel = n;
             tok = t;
             type = ty;
             decl = d;
             param = p;
+            this.returnType = returnType;
+
         }
 
         public String toString(){
@@ -40,7 +43,7 @@ public class IDTableKaio {
     public Ident insertar(String nombre, int tipo, ParserRuleContext declaracion)
     {
         Token token = new CommonToken(0,nombre);
-        Ident i = new Ident(nivelActual,token,tipo,declaracion,0);
+        Ident i = new Ident(nivelActual,token,tipo,declaracion,0,6);
         int j = 0;
         while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
             if (this.tabla.get(j).tok.getText().equals(nombre)) {
@@ -55,7 +58,7 @@ public class IDTableKaio {
 
     public Ident insertar(Token token, int tipo, ParserRuleContext declaracion)
     {
-        Ident i = new Ident(nivelActual,token,tipo,declaracion,0);
+        Ident i = new Ident(nivelActual,token,tipo,declaracion,0,6);
         int j = 0;
         while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
             if (this.tabla.get(j).tok.getText().equals(token.getText())&& (nivelActual == tabla.get(j).nivel)) {
@@ -69,9 +72,9 @@ public class IDTableKaio {
 
     }
 
-    public Ident insertar(Token token, int tipo, ParserRuleContext declaracion,int parametros)
+    public Ident insertar(Token token, int tipo, ParserRuleContext declaracion,int parametros,int returnType)
     {
-        Ident i = new Ident(nivelActual,token,tipo,declaracion,parametros);
+        Ident i = new Ident(nivelActual,token,tipo,declaracion,parametros, returnType);
         int j = 0;
         while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
             if (this.tabla.get(j).tok.getText().equals(token.getText())&& (nivelActual == tabla.get(j).nivel)) {
@@ -110,6 +113,26 @@ public class IDTableKaio {
                 break;
             }
         return temp;
+    }
+
+    public Ident buscarAcceso(String nombre)
+    {
+        Ident scopeActual = null;
+        Ident scopeGlobal = null;
+        for(Ident id : this.tabla) {
+            if (id.tok.getText().equals(nombre) && id.nivel == nivelActual) {
+                scopeActual = id;
+                break;
+            } else if (id.tok.getText().equals(nombre) && id.nivel == 1) {
+                scopeGlobal = id;
+            }
+        }
+        if(scopeActual != null){
+            return scopeActual;
+        }
+        else{
+            return scopeGlobal;
+        }
     }
 
     public void imprimir() {

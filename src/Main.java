@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 import java.io.FileReader;
+import textpademo.ThrowingErrorListener;
 import java.util.List;
 import javax.swing.JFrame;
 
@@ -21,8 +22,12 @@ public class Main {
         try {
         input = new ANTLRInputStream(new FileReader("gg.txt"));
         inst = new ScannerSS4(input);
+        inst.removeErrorListeners();
+        inst.addErrorListener(ThrowingErrorListener.INSTANCE);
         tokens = new CommonTokenStream(inst);
         parser = new ParserUI(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
 
         //java.util.concurrent.Future <JFrame> treeGUI = org.antlr.v4.gui.Trees.inspect(tree,parser);
         //treeGUI.get().setVisible(true);
@@ -32,8 +37,13 @@ public class Main {
         try {
             ParseTree tree = parser.program();
             CheckerSB v = new CheckerSB();
-            v.visit(tree);
-            System.out.println("Compilación Exitosa!!\n");
+            int state = (int)v.visit(tree);
+            //System.out.println(state);
+            if(state != -1) {
+                System.out.println("Compilación Exitosa!!\n");
+            }else{
+                System.out.println("Compilacion Fallida");
+            }
     }
         catch(RecognitionException e){
         System.out.println("Compilación Fallida!!");

@@ -14,7 +14,13 @@ public class ThrowingErrorListener extends BaseErrorListener{
         @Override
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
                 throws ParseCancellationException {
-            System.out.println("Error \""+msg+"\" en la linea " + line+" y en la posicion "+charPositionInLine);
+            if(msg.contains("mismatched")){
+                msg = "Se encontro algo inesperado";
+            }
+            else{
+                msg = "falta una expresion";
+            }
+            System.err.println("Error \""+msg+"\" en la linea " + line+" y en la posicion "+charPositionInLine);
             throw new ParseCancellationException("line " + line + ":" + charPositionInLine + " " + msg);
         }
 
