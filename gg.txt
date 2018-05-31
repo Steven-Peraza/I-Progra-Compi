@@ -3,3 +3,23 @@ let a = 2;
 
 let b = 3;
 
+<<<<<<< HEAD
+=======
+let c = a<b;
+
+
+let f = ["asd","asd","ad"];
+
+let k = {1:2};
+
+let p = [3+2,4,5,6]
+//let p = 4
+let l = 5==4<6;
+//4<5<"fds"
+
+let algo = fn(k,y,p)
+{
+ return 5
+};
+
+>>>>>>> 5bbb5cde4a781f19f532171f03d596978767fdd9
