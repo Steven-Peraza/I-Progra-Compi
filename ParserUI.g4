@@ -12,7 +12,7 @@ statement  	: LET letStatement                                                  
             | RETURN returnStatement                                                        #statementRETURN
             | expressionStatement                                                           #statementEXPRESSION
 ;
-letStatement          	: ID ASSIGN expression ( PyCOMA | )                                 #letAST
+letStatement locals [int storageIndex=0]: identifier ASSIGN expression ( PyCOMA | )                                 #letAST
 ;
 returnStatement	: expression ( PyCOMA | )                                                   #returnAST
 ;
@@ -36,9 +36,10 @@ elementAccess       	: PCI expression PCD                                       
 ;
 callExpression	: PIZQ expressionList PDER                                                  #callExpressionAST
 ;
-primitiveExpression	: NUM                                                                   #pExpNUM
+primitiveExpression:
+                    NUM                                                                     #pExpNUM
                     | STRING                                                                #pExpSTRING
-                    | ID                                                                    #pExpID
+                    | identifier                                                            #pExpID
                     | TRUE                                                                  #pExpTRUE
                     | FALSE                                                                 #pExpFALSE
                     | PIZQ expression PDER                                                  #pExpEXPRESSION
@@ -61,6 +62,10 @@ functionLiteral	: FUN PIZQ functionParameters PDER blockStatement               
 ;
 functionParameters	: ID moreIdentifiers                                                    #functionParametersAST
 ;
+identifier
+locals [ParserRuleContext decl=null]
+        : ID                                                                                #idAST
+        ;
 moreIdentifiers	: (COMA ID)*                                                                #moreIdentifiersAST
 ;
 hashLiteral		: LLIZQ hashContent moreHashContent LLDER                                   #hashLiteralAST

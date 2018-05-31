@@ -1,4 +1,4 @@
-// Generated from /Users/jafethvasquez/proyectosPersonales/PrograCompi/ParserUI.g4 by ANTLR 4.7
+// Generated from C:/Users/Steven/Progra Compi/I-Progra-Compi\ParserUI.g4 by ANTLR 4.7
 package generated;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -262,6 +262,13 @@ public interface ParserUIVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctionParametersAST(ParserUI.FunctionParametersASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code idAST}
+	 * labeled alternative in {@link ParserUI#identifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdAST(ParserUI.IdASTContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code moreIdentifiersAST}
 	 * labeled alternative in {@link ParserUI#moreIdentifiers}.

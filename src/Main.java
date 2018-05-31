@@ -1,5 +1,6 @@
 import Checker.CheckerSB;
 import generated.*;
+import interpreter.InterpreterSS3;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
@@ -37,7 +38,12 @@ public class Main {
         try {
             ParseTree tree = parser.program();
             CheckerSB v = new CheckerSB();
+
             int state = (int)v.visit(tree);
+
+            InterpreterSS3 i = new InterpreterSS3();
+            i.visit(tree);
+
             //System.out.println(state);
             if(state != -1) {
                 System.out.println("Compilación Exitosa!!\n");

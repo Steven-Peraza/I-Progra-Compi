@@ -1,4 +1,4 @@
-// Generated from /Users/jafethvasquez/proyectosPersonales/PrograCompi/ParserUI.g4 by ANTLR 4.7
+// Generated from C:/Users/Steven/Progra Compi/I-Progra-Compi\ParserUI.g4 by ANTLR 4.7
 package generated;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -263,6 +263,13 @@ public class ParserUIBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitFunctionParametersAST(ParserUI.FunctionParametersASTContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIdAST(ParserUI.IdASTContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
