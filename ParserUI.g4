@@ -12,7 +12,7 @@ statement  	: LET letStatement                                                  
             | RETURN returnStatement                                                        #statementRETURN
             | expressionStatement                                                           #statementEXPRESSION
 ;
-letStatement locals [int storageIndex=0]: identifier ASSIGN expression ( PyCOMA | )                                 #letAST
+letStatement locals [int storageIndex=0]: identifier ASSIGN expression ( PyCOMA | )         #letAST
 ;
 returnStatement	: expression ( PyCOMA | )                                                   #returnAST
 ;

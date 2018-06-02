@@ -3,6 +3,7 @@ package interpreter;
 import Checker.IDTableKaio;
 import generated.ParserUI;
 import generated.ParserUIBaseVisitor;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.LinkedList;
@@ -76,11 +77,19 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 ;
         int tipo = (Integer) visit(ctx.expression());
         if (tipo == T_INT){
-            this.dataS.addData(ctx.identifier().getText(),ctx.expression().getText(),tipo);
+            Integer num = (Integer) this.evalStack.popValue();
+            System.out.println("Pila NUM "+num);
+            this.dataS.addData(ctx.identifier().getText(),num,tipo);
             tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
-            evalStack.pushValue(Integer.parseInt(ctx.expression().getText()));
         }
         else if (tipo == T_STRING){
+            String str = (String) this.evalStack.popValue();
+            System.out.println("Pila STR "+str);
+            this.dataS.addData(ctx.identifier().getText(),str,tipo);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
+
+        }
+        else if (tipo == T_RESER){
             this.dataS.addData(ctx.identifier().getText(),ctx.expression().getText(),tipo);
             tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
             evalStack.pushValue(ctx.expression().getText());
@@ -193,10 +202,15 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         for (ParserUI.MultiplicationExpressionContext i:
                 ctx.multiplicationExpression()) {
             temp2 = (int)visit(i);
-            if (temp != temp2) {
+            Integer v3 = (Integer) this.evalStack.popValue();
+            Integer v2 = (Integer) this.evalStack.popValue();
+            Integer v1 = (Integer) this.evalStack.popValue();
+
+            if (temp != temp2 && temp == T_INT) {
                 imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
+            this.evalStack.pushValue(evaluarSUM_RES(v1,v2,ctx));
         }
         return temp;
 
@@ -231,13 +245,17 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         if (ctx.elementExpression().size() == 0)
             return T_NULL;
         int temp = (int)visit(ctx.elementExpression(0)), temp2;
-        for (ParserUI.ElementExpressionContext i:
-                ctx.elementExpression()) {
+        for (ParserUI.ElementExpressionContext i: ctx.elementExpression()) {
             temp2 = (int)visit(i);
-            if (temp != temp2) {
+            Integer v3 = (Integer) this.evalStack.popValue();
+            Integer v2 = (Integer) this.evalStack.popValue();
+            Integer v1 = (Integer) this.evalStack.popValue();
+            if (temp != temp2 && temp == T_INT) {
                 imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
+            this.evalStack.pushValue(evaluarMUL_DIV(v1,v2,ctx));
+            //System.out.println(this.evalStack.popValue());
         }
         return temp;
     }
@@ -305,6 +323,26 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         return i;
     }
 
+    private Integer evaluarSUM_RES(Integer v1, Integer v2, ParserUI.AddfactorASTContext op){
+        Integer res=new Integer(0);
+        System.out.println(op.getText());
+        if (!op.SUM().isEmpty())
+            res = v1 + v2;
+        else if (!op.SUB().isEmpty())
+            res = v1 - v2;
+        System.out.println("Resultado de la SUM/RES "+ res);
+        return res;
+    }
+    private Integer evaluarMUL_DIV(Integer v1, Integer v2, ParserUI.MultifactorASTContext op){
+        Integer res=new Integer(0);
+        if (!op.MUL().isEmpty())
+            res = v1 * v2;
+        else if (!op.DIV().isEmpty())
+            res = v1 / v2;
+        System.out.println("Resultado de la MUL/DIV "+ res);
+        return res;
+    }
+
     @Override
     public Object visitElementAccessAST(ParserUI.ElementAccessASTContext ctx) {
 
@@ -328,11 +366,15 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpNUM(ParserUI.PExpNUMContext ctx) {
+
+        this.evalStack.pushValue((Integer.parseInt(ctx.NUM().getText())));
         return T_INT;
     }
 
     @Override
     public Object visitPExpSTRING(ParserUI.PExpSTRINGContext ctx) {
+
+        this.evalStack.pushValue(ctx.STRING().getText());
         return T_STRING;
     }
 
@@ -340,11 +382,11 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
     public Object visitPExpID(ParserUI.PExpIDContext ctx) {
         DataStorage.Value temp = dataS.getData(((ParserUI.LetASTContext)ctx.identifier().decl).storageIndex);
         if (temp.tipo == T_INT){
-            evalStack.pushValue((Integer) temp.value);
+            this.evalStack.pushValue((Integer) temp.value);
             System.out.println("asd"+evalStack.popValue());
             return T_INT;}
         else if (temp.tipo == T_STRING){
-            evalStack.pushValue((String) temp.value);
+            this.evalStack.pushValue((String) temp.value);
             return T_STRING;}
         return -1;
     }

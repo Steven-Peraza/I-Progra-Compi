@@ -46,7 +46,7 @@ public class Main {
 
             InterpreterSS3 i = new InterpreterSS3();
             i.visit(tree);
-
+/*
             //System.out.println(state);
             if(state != -1) {
                 System.out.println("Compilacion Exitosa!!\n");
@@ -54,7 +54,7 @@ public class Main {
                 viewr.open();
             }else{
                 System.out.println("Compilacion Fallida");
-            }
+            }*/
     }
         catch(RecognitionException e){
         System.out.println("Compilacion Fallida!!");
