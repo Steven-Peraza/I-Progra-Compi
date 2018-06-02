@@ -44,17 +44,19 @@ public class Main {
 
             int state = (int)v.visit(tree);
 
-            InterpreterSS3 i = new InterpreterSS3();
-            i.visit(tree);
-/*
+
+
             //System.out.println(state);
             if(state != -1) {
+                InterpreterSS3 i = new InterpreterSS3();
+                i.visit(tree);
                 System.out.println("Compilacion Exitosa!!\n");
-                TreeViewer viewr = new TreeViewer(Arrays.asList(parser.getRuleNames()),tree);
-                viewr.open();
+
+                //TreeViewer viewr = new TreeViewer(Arrays.asList(parser.getRuleNames()),tree);
+                //viewr.open();
             }else{
                 System.out.println("Compilacion Fallida");
-            }*/
+            }
     }
         catch(RecognitionException e){
         System.out.println("Compilacion Fallida!!");

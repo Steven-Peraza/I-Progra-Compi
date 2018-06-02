@@ -95,7 +95,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
         }
         else if(tipo == T_FUNC) {
-            ParserUI.BlockStatementASTContext fun = (ParserUI.BlockStatementASTContext) evalStack.popValue();
+            IDTableKaio.Function fun = (IDTableKaio.Function) evalStack.popValue();
             tablaIDs.insertar(idToken.getSymbol(), tipo, ctx, param, fReturnType, fun);
         }
 
@@ -108,7 +108,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         }
         else if (tipo == T_ARRAY){
             //String arr = (String) this.evalStack.popValue();
-            LinkedList<Integer> arr = (LinkedList<Integer>) this.evalStack.popValue();
+            LinkedList<IDTableKaio.ExpressionContainer> arr = (LinkedList<IDTableKaio.ExpressionContainer>) this.evalStack.popValue();
             System.out.println("Pila Arr "+arr);
             this.dataS.addData(ctx.identifier().getText(),arr,tipo);
             tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,arr);
@@ -313,7 +313,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         for (ParserUI.MultiplicationExpressionContext i:
                 ctx.multiplicationExpression()) {
             temp2 = (int)visit(i);
-            Integer v3 = (Integer) this.evalStack.popValue();
+            this.evalStack.popValue();
             Integer v2 = (Integer) this.evalStack.popValue();
             Integer v1 = (Integer) this.evalStack.popValue();
 
@@ -406,23 +406,17 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             imprimirError("Operacion Invalida: Variable no Encontrada", ctx.start.getLine(),ctx.start.getCharPositionInLine());
         }
         if ((ctx.callExpression() != null) && (res != null)){
-            o = (int) visit(ctx.callExpression());
-            if (res.type == T_FUNC || res.type == T_NEUTRO) {
-                //System.out.println(res.type);
-                if (o == res.param || res.type == T_NEUTRO) {
-                    if (i == T_FUNC) {
-                        return res.returnType;
-                    }
-                }
-                else {
-                    imprimirError("Cantidad de parametros incorrecta, se esperaban "+res.param+" parametros y se encontraron "+o+ " argumentos", ctx.start.getLine(),ctx.start.getCharPositionInLine());
-                    return T_ERROR;
-                }
+            LinkedList<IDTableKaio.ExpressionContainer> paramValues = (LinkedList<IDTableKaio.ExpressionContainer>) visit(ctx.callExpression());
+            tablaIDs.openScope();
+            IDTableKaio.Function func = (IDTableKaio.Function) evalStack.popValue();
+            for(int index=0; index<func.param; index++){
+                IDTableKaio.ExpressionContainer exp = paramValues.get(index);
+                tablaIDs.insertar(func.parameters.get(index),exp.type,null,exp.value);
             }
-            else{
-                imprimirError("Operacion Invalida: Esta variable no es una funcion ", ctx.start.getLine(),ctx.start.getCharPositionInLine());
-                return T_ERROR;
-            }
+            visit(func.instructions);
+            tablaIDs.closeScope();
+            return func.returnType;
+
         }
         else if ((ctx.callExpression() != null) && (res == null))
         {
@@ -468,11 +462,8 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitCallExpressionAST(ParserUI.CallExpressionASTContext ctx) {
-        LinkedList<Integer> tipo = (LinkedList<Integer> )visit(ctx.expressionList());
-        if(tipo != null)
-            return tipo.size();
-        imprimirError(CONTEXT_ERROR, ctx.start.getLine(),ctx.start.getCharPositionInLine());
-        return T_ERROR;
+        return visit(ctx.expressionList());
+        //return T_RESER;
     }
 
     @Override
@@ -493,7 +484,8 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
     @Override
     public Object visitPExpID(ParserUI.PExpIDContext ctx) {
         //DataStorage.Value temp = dataS.getData(ctx.identifier().getText());
-        IDTableKaio.Ident temp = tablaIDs.buscar(ctx.identifier().getText());
+        //System.out.println(ctx.identifier().getText());
+        IDTableKaio.Ident temp = tablaIDs.buscarAcceso(ctx.identifier().getText());
         if (temp.type == T_INT){
             this.evalStack.pushValue((Integer) temp.value);
             //System.out.println("asd"+evalStack.popValue());
@@ -501,6 +493,10 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         else if (temp.type == T_STRING){
             this.evalStack.pushValue((String) temp.value);
             return T_STRING;}
+        else if(temp.type == T_FUNC){
+            evalStack.pushValue(temp.value);
+            return T_FUNC;
+        }
         return -1;
     }
 
@@ -533,44 +529,45 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpARRAYFUNC(ParserUI.PExpARRAYFUNCContext ctx) {
-        LinkedList<Object> asd = (LinkedList<Object>) visit(ctx.expressionList());
+        LinkedList<IDTableKaio.ExpressionContainer> asd = (LinkedList<IDTableKaio.ExpressionContainer>) visit(ctx.expressionList());
+        System.out.println();
         int reser = (int)visit(ctx.arrayFunctions());
         if (reser == 11){
-            evaluarArrFunc((LinkedList<Object>) asd.getFirst(),11);
+            evaluarArrFunc((LinkedList<IDTableKaio.ExpressionContainer>) asd.getFirst().value,11);
             return T_INT;
         }
         else if (reser == 12){
-            evaluarArrFunc((LinkedList<Object>) asd.getFirst(),12);
+            evaluarArrFunc((LinkedList<IDTableKaio.ExpressionContainer>) asd.getFirst().value,12);
             return T_NEUTRO;
         }
         else if (reser == 13){
-            evaluarArrFunc((LinkedList<Object>) asd.getFirst(),13);
+            evaluarArrFunc((LinkedList<IDTableKaio.ExpressionContainer>) asd.getFirst().value,13);
             return T_NEUTRO;
         }
         else if (reser == 14){
-            evaluarArrFunc((LinkedList<Object>) asd.getFirst(),14);
+            evaluarArrFunc((LinkedList<IDTableKaio.ExpressionContainer>) asd.getFirst().value,14);
             return T_ARRAY;
         }
 
         return T_ERROR;
     }
 
-    public void evaluarArrFunc(LinkedList<Object> ctx,int tipo){
+    public void evaluarArrFunc(LinkedList<IDTableKaio.ExpressionContainer> ctx,int tipo){
         if (tipo == 11){
             this.evalStack.pushValue(ctx.size());
         }
         else if (tipo == 12){
-            this.evalStack.pushValue(ctx.getFirst());
+            this.evalStack.pushValue(ctx.getFirst().value);
         }
         else if (tipo == 13){
-            this.evalStack.pushValue(ctx.getLast());
+            this.evalStack.pushValue(ctx.getLast().value);
         }
         else if (tipo == 14){
             ctx.removeFirst();
             this.evalStack.pushValue(ctx);
         }
         else {
-            this.evalStack.pushValue(ctx.add(this.evalStack.popValue()));
+            this.evalStack.pushValue(ctx.add((IDTableKaio.ExpressionContainer)this.evalStack.popValue()));
         }
     }
 
@@ -643,7 +640,8 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
     public Object visitFunctionLiteralAST(ParserUI.FunctionLiteralASTContext ctx) {
         tablaIDs.openScope();
         visit(ctx.functionParameters());
-
+        LinkedList<String>parameters = (LinkedList<String>)evalStack.popValue();
+        System.out.println(parameters);
         int state = (int)visit(ctx.blockStatement());
         tablaIDs.closeScope();
         if(state == T_ERROR)
@@ -651,7 +649,8 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         if(state != T_RESER){
             fReturnType = state;
         }
-        evalStack.pushValue(ctx.blockStatement());
+        IDTableKaio.Function newFunction = new IDTableKaio.Function(parameters,ctx.blockStatement(),param,fReturnType);
+        evalStack.pushValue(newFunction);
         return T_FUNC;
     }
 
@@ -667,14 +666,20 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             return T_ERROR;
         }
         else{
-            tablaIDs.insertar(ctx.ID().getSymbol(),T_NEUTRO,ctx);
+            int type = (int)visit(ctx.moreIdentifiers());
+            LinkedList<String> parameters = (LinkedList<String>)evalStack.popValue();
+            parameters.add(ctx.ID().getText());
+            System.out.println(parameters);
+            evalStack.pushValue(parameters);
+            //tablaIDs.insertar(ctx.ID().getSymbol(),T_NEUTRO,ctx);
         }
-        return visit(ctx.moreIdentifiers());
+        return T_RESER;
     }
 
     @Override
     public Object visitMoreIdentifiersAST(ParserUI.MoreIdentifiersASTContext ctx) {
         IDTableKaio.Ident id;
+        LinkedList<String>parameters = new LinkedList<>();
         for( TerminalNode ele : ctx.ID()) {
             param++;
             id = tablaIDs.buscar(ele.getText());
@@ -685,9 +690,11 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
                 imprimirError("Parametro Invalido: Esta variable ya Existe en este Contexto ", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             } else {
-                tablaIDs.insertar(ele.getSymbol(), T_NEUTRO, ctx);
+                parameters.add(ele.getText());
+                //tablaIDs.insertar(ele.getSymbol(), T_NEUTRO, ctx);
             }
         }
+        evalStack.pushValue(parameters);
         return T_RESER;
     }
 
@@ -732,16 +739,17 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitExpressionListAST(ParserUI.ExpressionListASTContext ctx) {
-        LinkedList<Object> paramList = new LinkedList<Object>();
+        LinkedList<IDTableKaio.ExpressionContainer> paramList = new LinkedList<>();
         int t1 = (int)visit(ctx.expression());
-        paramList.add(this.evalStack.popValue());
-        Object[] val = (Object[]) visit(ctx.moreExpressions());
-        for (Object aVal : val) {
+        paramList.add(new IDTableKaio.ExpressionContainer(t1,evalStack.popValue()));
+        IDTableKaio.ExpressionContainer[] val = (IDTableKaio.ExpressionContainer[]) visit(ctx.moreExpressions());
+        for (IDTableKaio.ExpressionContainer aVal : val) {
             paramList.add(aVal);
         }
 
         return paramList;
     }
+
 
     @Override
     public Object visitExpressionListNULLAST(ParserUI.ExpressionListNULLASTContext ctx) {
@@ -750,12 +758,12 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitMoreExpressionsAST(ParserUI.MoreExpressionsASTContext ctx) {
-        LinkedList<Object> paramList2 = new LinkedList<Object>();
+        LinkedList<IDTableKaio.ExpressionContainer> paramList2 = new LinkedList<>();
         for( ParserUI.ExpressionContext ele : ctx.expression()) {
             int valor = (int) visit(ele);
-            paramList2.addLast(this.evalStack.popValue());
+            paramList2.addLast(new IDTableKaio.ExpressionContainer(valor,evalStack.popValue()));
         }
-        Object[] val2 = new Object[paramList2.size()];
+        IDTableKaio.ExpressionContainer[] val2 = new IDTableKaio.ExpressionContainer[paramList2.size()];
         val2 = paramList2.toArray(val2);
         return val2;
     }

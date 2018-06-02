@@ -7,9 +7,11 @@ let c = 7-4;
 
 let d = 1+2;
 
-let e = "asds"=="asd";
+let g = [1,2]
 
-let f = ["zxc","vbn"];
+let y = 1
+
+let e = "asds"=="asd";
 
 let o =  len([6,7,8]);
 
@@ -23,7 +25,14 @@ let g = [1,1];
 
 let q=[[2,3],1,"asd",{1:1}];
 
-let h = {1:2,3:4};
+let x = fn(d,c){
+let y = d+c
+puts(y)
+}
+puts(a)
+
+
+x(1,10)
 
 let y = {[1,2]:2,"asd":1,["asd"]:[1]}
 

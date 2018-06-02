@@ -1,5 +1,6 @@
 package Checker;
 
+import generated.ParserUI;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -31,10 +32,48 @@ public class IDTableKaio {
 
         }
 
+
+
         public String toString(){
             return this.tok.getText() + "," + this.nivel;
         }
     }
+
+    public static  class Function{
+        public LinkedList<String> parameters;
+        public ParserUI.BlockStatementContext instructions;
+        public int param;
+        public int returnType;
+
+        public Function(LinkedList<String> parameters, ParserUI.BlockStatementContext instructions, int param, int returnType) {
+            this.parameters = parameters;
+            this.instructions = instructions;
+            this.param = param;
+            this.returnType = returnType;
+        }
+
+        @Override
+        public String toString() {
+            return "Function{" +
+                    "parameters=" + parameters +
+                    ", instructions=" + instructions +
+                    ", param=" + param +
+                    ", returnType=" + returnType +
+                    '}';
+        }
+    }
+
+    public static class ExpressionContainer{
+        public int type;
+        public Object value;
+
+        public ExpressionContainer(int type, Object value) {
+            this.type = type;
+            this.value = value;
+        }
+    }
+
+
 
     public IDTableKaio()
     {
