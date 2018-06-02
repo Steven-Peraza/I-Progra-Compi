@@ -307,7 +307,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         for (ParserUI.MultiplicationExpressionContext i:
                 ctx.multiplicationExpression()) {
             temp2 = (int)visit(i);
-            Integer v3 = (Integer) this.evalStack.popValue();
+            this.evalStack.popValue();
             Integer v2 = (Integer) this.evalStack.popValue();
             Integer v1 = (Integer) this.evalStack.popValue();
 
@@ -400,9 +400,15 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             imprimirError("Operacion Invalida: Variable no Encontrada", ctx.start.getLine(),ctx.start.getCharPositionInLine());
         }
         if ((ctx.callExpression() != null) && (res != null)){
-            visit(ctx.callExpression());
+            LinkedList<IDTableKaio.ExpressionContainer> paramValues = (LinkedList<IDTableKaio.ExpressionContainer>) visit(ctx.callExpression());
+            tablaIDs.openScope();
             IDTableKaio.Function func = (IDTableKaio.Function) evalStack.popValue();
+            for(int index=0; index<func.param; index++){
+                IDTableKaio.ExpressionContainer exp = paramValues.get(index);
+                tablaIDs.insertar(func.parameters.get(index),exp.type,null,exp.value);
+            }
             visit(func.instructions);
+            tablaIDs.closeScope();
             return func.returnType;
 
         }
@@ -450,8 +456,8 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitCallExpressionAST(ParserUI.CallExpressionASTContext ctx) {
-        visit(ctx.expressionList());
-        return T_RESER;
+        return visit(ctx.expressionList());
+        //return T_RESER;
     }
 
     @Override
@@ -472,7 +478,8 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
     @Override
     public Object visitPExpID(ParserUI.PExpIDContext ctx) {
         //DataStorage.Value temp = dataS.getData(ctx.identifier().getText());
-        IDTableKaio.Ident temp = tablaIDs.buscar(ctx.identifier().getText());
+        //System.out.println(ctx.identifier().getText());
+        IDTableKaio.Ident temp = tablaIDs.buscarAcceso(ctx.identifier().getText());
         if (temp.type == T_INT){
             this.evalStack.pushValue((Integer) temp.value);
             //System.out.println("asd"+evalStack.popValue());
@@ -689,16 +696,17 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitExpressionListAST(ParserUI.ExpressionListASTContext ctx) {
-        LinkedList<Object> paramList = new LinkedList<Object>();
+        LinkedList<IDTableKaio.ExpressionContainer> paramList = new LinkedList<>();
         int t1 = (int)visit(ctx.expression());
-        paramList.add(this.evalStack.popValue());
-        Object[] val = (Object[]) visit(ctx.moreExpressions());
-        for (Object aVal : val) {
+        paramList.add(new IDTableKaio.ExpressionContainer(t1,evalStack.popValue()));
+        IDTableKaio.ExpressionContainer[] val = (IDTableKaio.ExpressionContainer[]) visit(ctx.moreExpressions());
+        for (IDTableKaio.ExpressionContainer aVal : val) {
             paramList.add(aVal);
         }
 
         return paramList;
     }
+
 
     @Override
     public Object visitExpressionListNULLAST(ParserUI.ExpressionListNULLASTContext ctx) {
@@ -707,12 +715,12 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitMoreExpressionsAST(ParserUI.MoreExpressionsASTContext ctx) {
-        LinkedList<Object> paramList2 = new LinkedList<Object>();
+        LinkedList<IDTableKaio.ExpressionContainer> paramList2 = new LinkedList<>();
         for( ParserUI.ExpressionContext ele : ctx.expression()) {
             int valor = (int) visit(ele);
-            paramList2.addLast(this.evalStack.popValue());
+            paramList2.addLast(new IDTableKaio.ExpressionContainer(valor,evalStack.popValue()));
         }
-        Object[] val2 = new Object[paramList2.size()];
+        IDTableKaio.ExpressionContainer[] val2 = new IDTableKaio.ExpressionContainer[paramList2.size()];
         val2 = paramList2.toArray(val2);
         return val2;
     }

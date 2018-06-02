@@ -7,13 +7,19 @@ let c = 7-4;
 
 let d = 1+2;
 
+let g = [1,2]
+
+let y = 1
+
 let e = "asds"=="asd";
 
-let f = ["zxc","vbn"];
+let x = fn(d,c){
+let y = d+c
+puts(y)
+}
+puts(a)
 
-let g = [1,1]==[1,1];
-
-let h = {1:2,3:4};
+x(1,a)
 
 /*
 if b<d

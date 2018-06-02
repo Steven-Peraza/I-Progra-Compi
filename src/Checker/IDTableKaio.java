@@ -63,6 +63,18 @@ public class IDTableKaio {
         }
     }
 
+    public static class ExpressionContainer{
+        public int type;
+        public Object value;
+
+        public ExpressionContainer(int type, Object value) {
+            this.type = type;
+            this.value = value;
+        }
+    }
+
+
+
     public IDTableKaio()
     {
         this.nivelActual = 0;
