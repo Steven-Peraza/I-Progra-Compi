@@ -16,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="gg.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="gg.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gg.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+            <state relative-caret-position="272">
+              <caret line="19" column="11" lean-forward="false" selection-start-line="19" selection-start-column="11" selection-end-line="19" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -77,7 +77,7 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
+            <state relative-caret-position="-34">
               <caret line="47" column="23" lean-forward="false" selection-start-line="47" selection-start-column="23" selection-end-line="47" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -86,28 +86,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InterpreterSS3.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="InterpreterSS3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/interpreter/InterpreterSS3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-97">
-              <caret line="698" column="9" lean-forward="true" selection-start-line="698" selection-start-column="9" selection-end-line="698" selection-end-column="9" />
+            <state relative-caret-position="221">
+              <caret line="568" column="30" lean-forward="false" selection-start-line="568" selection-start-column="30" selection-end-line="568" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1035#1051#0" expanded="true" />
-                <element signature="e#18589#18590#0" expanded="true" />
-                <element signature="e#18620#18621#0" expanded="true" />
-                <element signature="e#18699#18700#0" expanded="true" />
-                <element signature="e#18731#18732#0" expanded="true" />
-                <element signature="e#18812#18813#0" expanded="true" />
-                <element signature="e#18844#18845#0" expanded="true" />
-                <element signature="e#18935#18936#0" expanded="true" />
-                <element signature="e#18981#18982#0" expanded="true" />
-                <element signature="e#19592#19593#0" expanded="true" />
-                <element signature="e#19643#19644#0" expanded="true" />
-                <element signature="e#24567#24575#0" expanded="true" />
-                <element signature="e#25137#25145#0" expanded="true" />
-                <marker date="1527962215310" expanded="false" signature="24952:24963" ph=" { " />
-                <marker date="1527962215310" expanded="false" signature="24977:24983" ph=" }" />
+                <element signature="e#4229#4245#0" expanded="true" />
+                <element signature="e#18929#18930#0" expanded="true" />
+                <element signature="e#18960#18961#0" expanded="true" />
+                <element signature="e#19039#19040#0" expanded="true" />
+                <element signature="e#19071#19072#0" expanded="true" />
+                <element signature="e#19152#19153#0" expanded="true" />
+                <element signature="e#19184#19185#0" expanded="true" />
+                <element signature="e#19275#19276#0" expanded="true" />
+                <element signature="e#19321#19322#0" expanded="true" />
+                <element signature="e#20993#20994#0" expanded="true" />
+                <element signature="e#21044#21045#0" expanded="true" />
+                <element signature="e#21621#21622#0" expanded="true" />
+                <element signature="e#21646#21647#0" expanded="true" />
+                <element signature="e#26073#26081#0" expanded="true" />
+                <element signature="e#26643#26651#0" expanded="true" />
+                <marker date="1527976612169" expanded="false" signature="26458:26469" ph=" { " />
+                <marker date="1527976612169" expanded="false" signature="26483:26489" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -129,9 +132,10 @@
       <file leaf-file-name="EvaluationStack.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/interpreter/EvaluationStack.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+            <state relative-caret-position="238">
+              <caret line="18" column="5" lean-forward="true" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
               <folding>
+                <element signature="e#309#310#0" expanded="true" />
                 <element signature="e#352#353#0" expanded="true" />
               </folding>
             </state>
@@ -237,7 +241,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-7" />
     <option name="width" value="697" />
     <option name="height" value="735" />
@@ -432,7 +436,7 @@
     <option name="totallyTimeSpent" value="12179000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -788,16 +792,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="47" column="23" lean-forward="false" selection-start-line="47" selection-start-column="23" selection-end-line="47" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/generated/ParserUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -842,44 +836,58 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/interpreter/EvaluationStack.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        <state relative-caret-position="238">
+          <caret line="18" column="5" lean-forward="true" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
           <folding>
+            <element signature="e#309#310#0" expanded="true" />
             <element signature="e#352#353#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/interpreter/InterpreterSS3.java">
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-97">
-          <caret line="698" column="9" lean-forward="true" selection-start-line="698" selection-start-column="9" selection-end-line="698" selection-end-column="9" />
+        <state relative-caret-position="-34">
+          <caret line="47" column="23" lean-forward="false" selection-start-line="47" selection-start-column="23" selection-end-line="47" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1035#1051#0" expanded="true" />
-            <element signature="e#18589#18590#0" expanded="true" />
-            <element signature="e#18620#18621#0" expanded="true" />
-            <element signature="e#18699#18700#0" expanded="true" />
-            <element signature="e#18731#18732#0" expanded="true" />
-            <element signature="e#18812#18813#0" expanded="true" />
-            <element signature="e#18844#18845#0" expanded="true" />
-            <element signature="e#18935#18936#0" expanded="true" />
-            <element signature="e#18981#18982#0" expanded="true" />
-            <element signature="e#19592#19593#0" expanded="true" />
-            <element signature="e#19643#19644#0" expanded="true" />
-            <element signature="e#24567#24575#0" expanded="true" />
-            <element signature="e#25137#25145#0" expanded="true" />
-            <marker date="1527962215310" expanded="false" signature="24952:24963" ph=" { " />
-            <marker date="1527962215310" expanded="false" signature="24977:24983" ph=" }" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gg.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+        <state relative-caret-position="272">
+          <caret line="19" column="11" lean-forward="false" selection-start-line="19" selection-start-column="11" selection-end-line="19" selection-end-column="11" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/interpreter/InterpreterSS3.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="568" column="30" lean-forward="false" selection-start-line="568" selection-start-column="30" selection-end-line="568" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1035#1051#0" expanded="true" />
+            <element signature="e#4229#4245#0" expanded="true" />
+            <element signature="e#18929#18930#0" expanded="true" />
+            <element signature="e#18960#18961#0" expanded="true" />
+            <element signature="e#19039#19040#0" expanded="true" />
+            <element signature="e#19071#19072#0" expanded="true" />
+            <element signature="e#19152#19153#0" expanded="true" />
+            <element signature="e#19184#19185#0" expanded="true" />
+            <element signature="e#19275#19276#0" expanded="true" />
+            <element signature="e#19321#19322#0" expanded="true" />
+            <element signature="e#20993#20994#0" expanded="true" />
+            <element signature="e#21044#21045#0" expanded="true" />
+            <element signature="e#21621#21622#0" expanded="true" />
+            <element signature="e#21646#21647#0" expanded="true" />
+            <element signature="e#26073#26081#0" expanded="true" />
+            <element signature="e#26643#26651#0" expanded="true" />
+            <marker date="1527976612169" expanded="false" signature="26458:26469" ph=" { " />
+            <marker date="1527976612169" expanded="false" signature="26483:26489" ph=" }" />
+          </folding>
         </state>
       </provider>
     </entry>
