@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="111a62da-0bde-497b-a846-7c58c4ff616a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ParserUI.g4" afterPath="$PROJECT_DIR$/ParserUI.g4" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gg.txt" afterPath="$PROJECT_DIR$/gg.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/interpreter/InterpreterSS3.java" afterPath="$PROJECT_DIR$/src/interpreter/InterpreterSS3.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -18,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="gg.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="gg.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gg.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+            <state relative-caret-position="255">
+              <caret line="15" column="6" lean-forward="false" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -31,7 +28,7 @@
       <file leaf-file-name="IDTableKaio.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Checker/IDTableKaio.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1156">
+            <state relative-caret-position="374">
               <caret line="74" column="52" lean-forward="false" selection-start-line="74" selection-start-column="52" selection-end-line="74" selection-end-column="78" />
               <folding />
             </state>
@@ -41,11 +38,9 @@
       <file leaf-file-name="CheckerSB.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Checker/CheckerSB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1462">
-              <caret line="93" column="112" lean-forward="false" selection-start-line="93" selection-start-column="112" selection-end-line="93" selection-end-column="112" />
+            <state relative-caret-position="238">
+              <caret line="160" column="76" lean-forward="false" selection-start-line="160" selection-start-column="42" selection-end-line="160" selection-end-column="76" />
               <folding>
-                <element signature="e#16167#16168#0" expanded="true" />
-                <element signature="e#16198#16199#0" expanded="true" />
                 <marker date="1527806865211" expanded="false" signature="18466:18475" ph="&lt;~&gt;" />
                 <marker date="1527806865211" expanded="false" signature="19519:19528" ph="&lt;~&gt;" />
               </folding>
@@ -56,8 +51,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="47" column="26" lean-forward="true" selection-start-line="47" selection-start-column="26" selection-end-line="47" selection-end-column="26" />
+            <state relative-caret-position="220">
+              <caret line="47" column="23" lean-forward="false" selection-start-line="47" selection-start-column="23" selection-end-line="47" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -65,15 +60,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InterpreterSS3.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="InterpreterSS3.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/interpreter/InterpreterSS3.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-901">
-              <caret line="256" column="61" lean-forward="false" selection-start-line="256" selection-start-column="61" selection-end-line="256" selection-end-column="61" />
+            <state relative-caret-position="109">
+              <caret line="453" column="0" lean-forward="false" selection-start-line="453" selection-start-column="0" selection-end-line="453" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#19862#19871#0" expanded="true" />
-                <element signature="e#20915#20924#0" expanded="true" />
+                <element signature="e#22511#22520#0" expanded="true" />
+                <element signature="e#23564#23573#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -104,8 +99,8 @@
       <file leaf-file-name="DataStorage.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/interpreter/DataStorage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="54" column="5" lean-forward="true" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
+            <state relative-caret-position="207">
+              <caret line="38" column="27" lean-forward="true" selection-start-line="38" selection-start-column="27" selection-end-line="38" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -116,8 +111,8 @@
       <file leaf-file-name="ParserUI.g4" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ParserUI.g4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-12">
-              <caret line="14" column="34" lean-forward="false" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+            <state relative-caret-position="515">
+              <caret line="66" column="98" lean-forward="true" selection-start-line="66" selection-start-column="92" selection-end-line="66" selection-end-column="98" />
               <folding />
             </state>
           </provider>
@@ -144,6 +139,8 @@
       <find>identifier</find>
       <find>type</find>
       <find>IDast</find>
+      <find>comparison</find>
+      <find>arraylite</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -186,8 +183,8 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="676" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-7" />
     <option name="width" value="697" />
     <option name="height" value="735" />
   </component>
@@ -381,7 +378,7 @@
     <option name="totallyTimeSpent" value="12179000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -947,49 +944,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Checker/CheckerSB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1462">
-          <caret line="93" column="112" lean-forward="false" selection-start-line="93" selection-start-column="112" selection-end-line="93" selection-end-column="112" />
-          <folding>
-            <element signature="e#16167#16168#0" expanded="true" />
-            <element signature="e#16198#16199#0" expanded="true" />
-            <marker date="1527806865211" expanded="false" signature="18466:18475" ph="&lt;~&gt;" />
-            <marker date="1527806865211" expanded="false" signature="19519:19528" ph="&lt;~&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/generated/ParserUIBaseVisitor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5814">
           <caret line="342" column="1" lean-forward="false" selection-start-line="342" selection-start-column="1" selection-end-line="342" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Checker/IDTableKaio.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1156">
-          <caret line="74" column="52" lean-forward="false" selection-start-line="74" selection-start-column="52" selection-end-line="74" selection-end-column="78" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="47" column="26" lean-forward="true" selection-start-line="47" selection-start-column="26" selection-end-line="47" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ParserUI.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-12">
-          <caret line="14" column="34" lean-forward="false" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
           <folding />
         </state>
       </provider>
@@ -1006,31 +964,68 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/interpreter/DataStorage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="54" column="5" lean-forward="true" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
+        <state relative-caret-position="207">
+          <caret line="38" column="27" lean-forward="true" selection-start-line="38" selection-start-column="27" selection-end-line="38" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/interpreter/InterpreterSS3.java">
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-901">
-          <caret line="256" column="61" lean-forward="false" selection-start-line="256" selection-start-column="61" selection-end-line="256" selection-end-column="61" />
+        <state relative-caret-position="220">
+          <caret line="47" column="23" lean-forward="false" selection-start-line="47" selection-start-column="23" selection-end-line="47" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#19862#19871#0" expanded="true" />
-            <element signature="e#20915#20924#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Checker/IDTableKaio.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="74" column="52" lean-forward="false" selection-start-line="74" selection-start-column="52" selection-end-line="74" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Checker/CheckerSB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="160" column="76" lean-forward="false" selection-start-line="160" selection-start-column="42" selection-end-line="160" selection-end-column="76" />
+          <folding>
+            <marker date="1527806865211" expanded="false" signature="18466:18475" ph="&lt;~&gt;" />
+            <marker date="1527806865211" expanded="false" signature="19519:19528" ph="&lt;~&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ParserUI.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="515">
+          <caret line="66" column="98" lean-forward="true" selection-start-line="66" selection-start-column="92" selection-end-line="66" selection-end-column="98" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gg.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+        <state relative-caret-position="255">
+          <caret line="15" column="6" lean-forward="false" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/interpreter/InterpreterSS3.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="453" column="0" lean-forward="false" selection-start-line="453" selection-start-column="0" selection-end-line="453" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#22511#22520#0" expanded="true" />
+            <element signature="e#23564#23573#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

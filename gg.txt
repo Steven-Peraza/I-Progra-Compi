@@ -7,3 +7,11 @@ let c = 7-4;
 
 let d = 1+2;
 
+let e = "asds"=="asd";
+
+let f = [1,1];
+
+let g = [1,1]==[1,1];
+
+puts(f)
+
