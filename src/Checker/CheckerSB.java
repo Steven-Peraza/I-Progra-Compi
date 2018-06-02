@@ -87,7 +87,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
             return T_ERROR;
         }
         if (res == null){
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,null);
             return T_RESER;
         }
         else{

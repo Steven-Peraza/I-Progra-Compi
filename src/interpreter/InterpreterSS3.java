@@ -81,32 +81,38 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             Integer num = (Integer) this.evalStack.popValue();
             System.out.println("Pila NUM "+num);
             this.dataS.addData(ctx.identifier().getText(),num,tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,num);
         }
         else if (tipo == T_STRING){
             String str = (String) this.evalStack.popValue();
             System.out.println("Pila STR "+str);
             this.dataS.addData(ctx.identifier().getText(),str,tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,str);
 
         }
+        else if(tipo == T_FUNC) {
+            ParserUI.BlockStatementASTContext fun = (ParserUI.BlockStatementASTContext) evalStack.popValue();
+            tablaIDs.insertar(idToken.getSymbol(), tipo, ctx, param, fReturnType, fun);
+        }
+
         else if (tipo == T_BOOLEAN){
             Boolean bol = (Boolean) this.evalStack.popValue();
             System.out.println("Pila Bool "+bol);
             this.dataS.addData(ctx.identifier().getText(),bol,tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,bol);
 
         }
         else if (tipo == T_ARRAY){
             String arr = (String) this.evalStack.popValue();
             System.out.println("Pila Arr "+arr);
             this.dataS.addData(ctx.identifier().getText(),arr,tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,arr);
+
 
         }
         else if (tipo == T_RESER){
             this.dataS.addData(ctx.identifier().getText(),ctx.expression().getText(),tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,null);
             evalStack.pushValue(ctx.expression().getText());
         }
         System.out.println(this.dataS.toString());
@@ -451,12 +457,13 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpID(ParserUI.PExpIDContext ctx) {
-        DataStorage.Value temp = dataS.getData(((ParserUI.LetASTContext)ctx.identifier().decl).storageIndex);
-        if (temp.tipo == T_INT){
+        //DataStorage.Value temp = dataS.getData(ctx.identifier().getText());
+        IDTableKaio.Ident temp = tablaIDs.buscar(ctx.identifier().getText());
+        if (temp.type == T_INT){
             this.evalStack.pushValue((Integer) temp.value);
-            System.out.println("asd"+evalStack.popValue());
+            //System.out.println("asd"+evalStack.popValue());
             return T_INT;}
-        else if (temp.tipo == T_STRING){
+        else if (temp.type == T_STRING){
             this.evalStack.pushValue((String) temp.value);
             return T_STRING;}
         return -1;
@@ -574,6 +581,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         if(state != T_RESER){
             fReturnType = state;
         }
+        evalStack.pushValue(ctx.blockStatement());
         return T_FUNC;
     }
 

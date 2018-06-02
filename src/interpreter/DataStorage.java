@@ -45,6 +45,11 @@ public class DataStorage {
 
     public Value getData(String name) {
         //se debe buscar en la tabla pero por nombre
+        for(Value element:data){
+            if(element.name.equals(name)){
+                return element;
+            }
+        }
         return null;
     }
 

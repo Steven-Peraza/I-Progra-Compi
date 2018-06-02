@@ -18,9 +18,11 @@ public class IDTableKaio {
         public ParserRuleContext decl; //por si fuera necesario saber más acerca del contexto del identificador en el árbol
         public int param;
         public int returnType;
+        public Object value;
 
-        public Ident(int n, Token t, int ty, ParserRuleContext d, int p, int returnType) {
+        public Ident(int n, Token t, int ty, ParserRuleContext d, int p, int returnType, Object v) {
             nivel = n;
+            value = v;
             tok = t;
             type = ty;
             decl = d;
@@ -40,10 +42,10 @@ public class IDTableKaio {
         this.tabla = new LinkedList<Ident>();
     }
 
-    public Ident insertar(String nombre, int tipo, ParserRuleContext declaracion)
+    public Ident insertar(String nombre, int tipo, ParserRuleContext declaracion, Object value)
     {
         Token token = new CommonToken(0,nombre);
-        Ident i = new Ident(nivelActual,token,tipo,declaracion,0,6);
+        Ident i = new Ident(nivelActual,token,tipo,declaracion,0,6, value);
         int j = 0;
         while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
             if (this.tabla.get(j).tok.getText().equals(nombre)) {
@@ -58,7 +60,7 @@ public class IDTableKaio {
 
     public Ident insertar(Token token, int tipo, ParserRuleContext declaracion)
     {
-        Ident i = new Ident(nivelActual,token,tipo,declaracion,0,6);
+        Ident i = new Ident(nivelActual,token,tipo,declaracion,0,6,null);
         int j = 0;
         while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
             if (this.tabla.get(j).tok.getText().equals(token.getText())&& (nivelActual == tabla.get(j).nivel)) {
@@ -72,9 +74,9 @@ public class IDTableKaio {
 
     }
 
-    public Ident insertar(Token token, int tipo, ParserRuleContext declaracion,int parametros,int returnType)
+    public Ident insertar(Token token, int tipo, ParserRuleContext declaracion,int parametros,int returnType,Object value)
     {
-        Ident i = new Ident(nivelActual,token,tipo,declaracion,parametros, returnType);
+        Ident i = new Ident(nivelActual,token,tipo,declaracion,parametros, returnType,value);
         int j = 0;
         while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
             if (this.tabla.get(j).tok.getText().equals(token.getText())&& (nivelActual == tabla.get(j).nivel)) {
@@ -143,7 +145,7 @@ public class IDTableKaio {
                 for (int j = 0; j < i.nivel; j++) {
                     nivel += "\t";
                 }
-                System.out.println(nivel + "Nombre: " + i.tok.getText() + " - Nivel: " + i.nivel);
+                System.out.println(nivel + "Nombre: " + i.tok.getText() + " - Nivel: " + i.nivel + "------> "+ i.value);
             }
             System.out.println("------------------------------------------");
         }
