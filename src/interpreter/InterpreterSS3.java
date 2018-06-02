@@ -6,6 +6,7 @@ import generated.ParserUIBaseVisitor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.lang.reflect.Array;
 import java.util.LinkedList;
 
 
@@ -89,6 +90,20 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
 
         }
+        else if (tipo == T_BOOLEAN){
+            Boolean bol = (Boolean) this.evalStack.popValue();
+            System.out.println("Pila Bool "+bol);
+            this.dataS.addData(ctx.identifier().getText(),bol,tipo);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
+
+        }
+        else if (tipo == T_ARRAY){
+            String arr = (String) this.evalStack.popValue();
+            System.out.println("Pila Arr "+arr);
+            this.dataS.addData(ctx.identifier().getText(),arr,tipo);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
+
+        }
         else if (tipo == T_RESER){
             this.dataS.addData(ctx.identifier().getText(),ctx.expression().getText(),tipo);
             tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType);
@@ -154,12 +169,68 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
                 imprimirError(CONTEXT_ERROR, ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
-            else if(type2 != type1 || (!isAssignation && type1 != T_INT)){
+
+            else if (type1 == type2 && type1 == T_INT){
+                Integer v3 = (Integer) this.evalStack.popValue();
+                Integer v2 = (Integer) this.evalStack.popValue();
+                Integer v1 = (Integer) this.evalStack.popValue();
+                this.evalStack.pushValue(evaluarCOMPINT(v1,v2,ctx));
+            }
+            else if (type1 == type2 && (type1 == T_STRING || type1 == T_ARRAY) && isAssignation){
+                String v3 = (String) this.evalStack.popValue();
+                String v2 = (String) this.evalStack.popValue();
+                String v1 = (String) this.evalStack.popValue();
+                this.evalStack.pushValue(evaluarCOMPEQU(v1,v2,ctx));
+
+            }
+            else if (type1 == type2 && type1 == T_BOOLEAN && isAssignation){
+                boolean v3 = (boolean) this.evalStack.popValue();
+                boolean v2 = (boolean) this.evalStack.popValue();
+                boolean v1 = (boolean) this.evalStack.popValue();
+                this.evalStack.pushValue(evaluarCOMPEQU(v1,v2,ctx));
+
+            }
+
+            else{
                 imprimirError(ERROR_IVALID_OPERATION, ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;}
+
         }
         return type1;
     }
+
+    private Boolean evaluarCOMPEQU(Object v1, Object v2, ParserUI.ComparisonASTContext op){
+        Boolean res=new Boolean(true);
+        System.out.println(v1);
+        System.out.println(v2);
+        if (!op.EQU().isEmpty()){
+            res = v1.equals(v2);
+        }
+        System.out.println("EQUAL = "+res);
+        return res;
+    }
+
+    private Boolean evaluarCOMPINT(Integer v1, Integer v2, ParserUI.ComparisonASTContext op){
+        Boolean res=new Boolean(true);
+        if (!op.EQU().isEmpty()){
+            res = v1 == v2;
+        }
+        else if (!op.MAYOR().isEmpty()){
+            res = v1 > v2;
+        }
+        else if (!op.MAYOREQ().isEmpty()){
+            res = v1 >= v2;
+        }
+        else if (!op.MENOR().isEmpty()){
+            res = v1 < v2;
+        }
+        else if (!op.MENOREQ().isEmpty()){
+            res = v1 <= v2;
+        }
+        System.out.println("EQUAL INT = "+res);
+        return res;
+    }
+
 
     @Override
     public Object visitAdditionExpressionAST(ParserUI.AdditionExpressionASTContext ctx) {
@@ -413,7 +484,8 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpARRAYLITE(ParserUI.PExpARRAYLITEContext ctx) {
-        return visit(ctx.arrayLiteral());
+        this.evalStack.pushValue(ctx.arrayLiteral().getText());
+        return T_ARRAY;
     }
 
     @Override
