@@ -484,6 +484,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpARRAYLITE(ParserUI.PExpARRAYLITEContext ctx) {
+        System.out.println(ctx.arrayLiteral().getText());
         this.evalStack.pushValue(ctx.arrayLiteral().getText());
         return T_ARRAY;
     }
