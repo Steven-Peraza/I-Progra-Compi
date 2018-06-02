@@ -9,9 +9,22 @@ let d = 1+2;
 
 let e = "asds"=="asd";
 
-let f = [1,1];
+let f = ["zxc","vbn"];
 
 let g = [1,1]==[1,1];
 
-puts(f)
+let h = {1:2,3:4};
+
+/*
+if b<d
+{
+let r = b+6;
+puts(r)}
+else
+{if 4==4{
+puts(4)
+}
+else{
+puts(5)
+}}*/
 

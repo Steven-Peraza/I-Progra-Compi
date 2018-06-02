@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 
@@ -24,6 +26,8 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     public int param = 0;
     public int fReturnType = T_RESER;
+    public HashMap<Object,Object> hash = new HashMap<Object, Object>();
+
     public InterpreterSS3(){
         this.dataS=new DataStorage();
         this.evalStack = new EvaluationStack();
@@ -103,11 +107,20 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
         }
         else if (tipo == T_ARRAY){
-            String arr = (String) this.evalStack.popValue();
+            //String arr = (String) this.evalStack.popValue();
+            LinkedList<Integer> arr = (LinkedList<Integer>) this.evalStack.popValue();
             System.out.println("Pila Arr "+arr);
             this.dataS.addData(ctx.identifier().getText(),arr,tipo);
             tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,arr);
 
+
+        }
+        else if (tipo == T_HASH){
+            HashMap<Object,Object> ha = (HashMap<Object,Object>) this.evalStack.popValue();
+            System.out.println("Pila Hash "+ha);
+            this.dataS.addData(ctx.identifier().getText(),ha,tipo);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,ha);
+            this.hash.clear();
 
         }
         else if (tipo == T_RESER){
@@ -182,10 +195,25 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
                 Integer v1 = (Integer) this.evalStack.popValue();
                 this.evalStack.pushValue(evaluarCOMPINT(v1,v2,ctx));
             }
-            else if (type1 == type2 && (type1 == T_STRING || type1 == T_ARRAY) && isAssignation){
+            else if (type1 == type2 && (type1 == T_STRING) && isAssignation){
                 String v3 = (String) this.evalStack.popValue();
                 String v2 = (String) this.evalStack.popValue();
                 String v1 = (String) this.evalStack.popValue();
+                this.evalStack.pushValue(evaluarCOMPEQU(v1,v2,ctx));
+
+            }
+            else if (type1 == type2 && type1 == T_ARRAY && isAssignation){
+                LinkedList<Integer> v3 = (LinkedList<Integer>) this.evalStack.popValue();
+                System.out.println("Comparison3 "+v3);
+                LinkedList<Integer> v2 = (LinkedList<Integer>) this.evalStack.popValue();
+                LinkedList<Integer> v1 = (LinkedList<Integer>) this.evalStack.popValue();
+                this.evalStack.pushValue(evaluarCOMPEQU(v1,v2,ctx));
+
+            }
+            else if (type1 == type2 && type1 == T_HASH && isAssignation){
+                HashMap<Object,Object> v3 = (HashMap<Object,Object>) this.evalStack.popValue();
+                HashMap<Object,Object> v2 = (HashMap<Object,Object>) this.evalStack.popValue();
+                HashMap<Object,Object> v1 = (HashMap<Object,Object>) this.evalStack.popValue();
                 this.evalStack.pushValue(evaluarCOMPEQU(v1,v2,ctx));
 
             }
@@ -422,7 +450,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitCallExpressionAST(ParserUI.CallExpressionASTContext ctx) {
-        visit(ctx.expressionList())
+        visit(ctx.expressionList());
         return T_RESER;
     }
 
@@ -436,6 +464,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
     @Override
     public Object visitPExpSTRING(ParserUI.PExpSTRINGContext ctx) {
 
+        this.evalStack.pushValue(ctx.STRING().getText());
         this.evalStack.pushValue(ctx.STRING().getText());
         return T_STRING;
     }
@@ -480,8 +509,9 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpARRAYLITE(ParserUI.PExpARRAYLITEContext ctx) {
-        this.evalStack.pushValue(ctx.arrayLiteral().getText());
-        return T_ARRAY;
+        //System.out.println(ctx.arrayLiteral().getText());
+        int tt =(Integer) visit(ctx.arrayLiteral());
+        return tt;
     }
 
     @Override
@@ -501,7 +531,9 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpHASHLITE(ParserUI.PExpHASHLITEContext ctx) {
-        return visit(ctx.hashLiteral());
+        int tt = (Integer) visit(ctx.hashLiteral());
+        this.evalStack.pushValue(this.hash);
+        return tt;
     }
 
     @Override
@@ -551,10 +583,10 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         if(ctx.expressionList().children == null){
             return T_ARRAY;
         }
-        LinkedList<Integer>  tipo =  (LinkedList<Integer> )visit(ctx.expressionList());
-        if (tipo.getFirst() != T_ERROR)
-            return T_ARRAY;
-        return T_ERROR;
+        LinkedList<Object>  tipo =  (LinkedList<Object> )visit(ctx.expressionList());
+        this.evalStack.pushValue(tipo);
+        //System.out.println("Array Verdad "+tipo);
+        return T_ARRAY;
     }
 
     @Override
@@ -657,11 +689,16 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitExpressionListAST(ParserUI.ExpressionListASTContext ctx) {
-        visit(ctx.expression());
-        visit(ctx.moreExpressions());
-        return T_RESER;
+        LinkedList<Object> paramList = new LinkedList<Object>();
+        int t1 = (int)visit(ctx.expression());
+        paramList.add(this.evalStack.popValue());
+        Object[] val = (Object[]) visit(ctx.moreExpressions());
+        for (Object aVal : val) {
+            paramList.add(aVal);
         }
 
+        return paramList;
+    }
 
     @Override
     public Object visitExpressionListNULLAST(ParserUI.ExpressionListNULLASTContext ctx) {
@@ -670,7 +707,13 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitMoreExpressionsAST(ParserUI.MoreExpressionsASTContext ctx) {
-        for(ParserUI.ExpressionContext exp: ctx.expression())
+        LinkedList<Object> paramList2 = new LinkedList<Object>();
+        for( ParserUI.ExpressionContext ele : ctx.expression()) {
+            int valor = (int) visit(ele);
+            paramList2.addLast(this.evalStack.popValue());
+        }
+        Object[] val2 = new Object[paramList2.size()];
+        val2 = paramList2.toArray(val2);
         return val2;
     }
 
@@ -691,7 +734,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             return T_ERROR;
         }
         else{
-            System.out.println("Si se imprime la var: "+ctx.getText().substring(5,ctx.getText().length()-1));
+            System.out.println("Si se imprime la var: "+ctx.getText().substring(5,ctx.getText().length()-1)+" con el valor de "+res.value);
             return tipo;
         }
     }
@@ -699,11 +742,20 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
     @Override
     public Object visitIfExpressionAST(ParserUI.IfExpressionASTContext ctx) {
         int bool = (int)visit(ctx.expression());
+        int state = -1;
+        Boolean resultadoComp = (Boolean) this.evalStack.popValue();
         if((bool ==T_BOOLEAN) || ((bool==T_NEUTRO))) {
-            int state = (int)visit(ctx.blockStatement(0));
-
-            if(ctx.ELSE() != null){
-                state = (int)visit(ctx.blockStatement(1));
+            if (resultadoComp){
+                //tablaIDs.openScope();
+                state = (int)visit(ctx.blockStatement(0));
+                //tablaIDs.closeScope();
+            }
+            else{
+                if(ctx.ELSE() != null){
+                    //tablaIDs.openScope();
+                    state = (int)visit(ctx.blockStatement(1));
+                    //tablaIDs.closeScope();
+                }
             }
             if(state == T_ERROR)
                 return T_ERROR;
