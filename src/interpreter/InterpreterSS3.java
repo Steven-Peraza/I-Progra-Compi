@@ -402,7 +402,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
                 IDTableKaio.ExpressionContainer exp = paramValues.get(index);
                 tablaIDs.insertar(func.parameters.get(index),exp.type,null,exp.value);
             }
-            visit(func.instructions);
+            func.returnType = (int) visit(func.instructions);
             tablaIDs.closeScope();
             System.out.println(func.returnType);
             return func.returnType;
@@ -628,17 +628,10 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitFunctionLiteralAST(ParserUI.FunctionLiteralASTContext ctx) {
-        tablaIDs.openScope();
+
         visit(ctx.functionParameters());
         LinkedList<String>parameters = (LinkedList<String>)evalStack.popValue();
         System.out.println(parameters);
-        int state = (int)visit(ctx.blockStatement());
-        tablaIDs.closeScope();
-        if(state == T_ERROR)
-            return T_ERROR;
-        if(state != T_RESER){
-            fReturnType = state;
-        }
         IDTableKaio.Function newFunction = new IDTableKaio.Function(parameters,ctx.blockStatement(),param,fReturnType);
         evalStack.pushValue(newFunction);
         return T_FUNC;
