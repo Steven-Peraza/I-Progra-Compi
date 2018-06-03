@@ -1,6 +1,8 @@
 
 let a = "Hola";
-
+let x = fn(d,c){
+return 5
+}
 let b = (3+3)*9;
 
 let c = 7-4;
@@ -11,15 +13,14 @@ let g = [1,2]
 
 let y = 1
 
+let m = x(1,b)
+
 let e = "asds"=="asd";
 
-let x = fn(d,c){
-let y = d+c
-puts(y)
-}
+
 puts(a)
 
-x(1,a)
+
 
 /*
 if b<d

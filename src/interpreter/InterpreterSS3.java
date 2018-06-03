@@ -4,6 +4,7 @@ import Checker.IDTableKaio;
 import generated.ParserUI;
 import generated.ParserUIBaseVisitor;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.lang.reflect.Array;
@@ -133,14 +134,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
     }
     @Override
     public Object visitReturnAST(ParserUI.ReturnASTContext ctx) {
-        //System.out.println(ctx.expression().parent.getParent().getParent().getParent().getText());
-        if ((ctx.expression().parent.getParent().getParent().getParent() != null) &&(ctx.expression().parent.getParent().getParent().getParent().getText().contains("fn"))){
-            return visit(ctx.expression());
-        }
-        else{
-            imprimirError("Return fuera de funcion",ctx.start.getLine(),ctx.start.getCharPositionInLine());
-            return T_ERROR;
-        }
+         return visit(ctx.expression());
     }
 
     @Override
@@ -166,7 +160,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             return T_ERROR;
         }
         else if(temp != temp2){
-            imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Expr", ctx.start.getLine(),ctx.start.getCharPositionInLine());
             return T_ERROR;
         }
         else
@@ -277,26 +271,16 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             return t1;
         }
 
-        if(t1 == T_NEUTRO) {
-            t1 = T_INT;
-        }
-        if(t2 == T_NEUTRO)
-            t2 = T_INT;
-
-
         if (t1 != t2){
             //System.out.println("Tipos incompatibles al realizar la OP de "+ctx.additionFactor().getText());
-            imprimirError(ERROR_NON_COMPATIBLE_TYPES,ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Add",ctx.start.getLine(),ctx.start.getCharPositionInLine());
             return T_ERROR;
         }
         else
         if (t1 == T_INT){
             return  t1;
         }
-        else{
-            imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
-            return T_ERROR;}
-
+    return T_RESER;
     }
 
     @Override
@@ -308,14 +292,19 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
                 ctx.multiplicationExpression()) {
             temp2 = (int)visit(i);
             this.evalStack.popValue();
-            Integer v2 = (Integer) this.evalStack.popValue();
-            Integer v1 = (Integer) this.evalStack.popValue();
+            try {
+                Integer v2 = (Integer) this.evalStack.popValue();
+                Integer v1 = (Integer) this.evalStack.popValue();
+                this.evalStack.pushValue(evaluarSUM_RES(v1,v2,ctx));
+            }catch (Exception e){
+                imprimirError("operadores invalidos",ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            }
 
             if (temp != temp2 && temp == T_INT) {
-                imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+                imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "AddFact", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
-            this.evalStack.pushValue(evaluarSUM_RES(v1,v2,ctx));
+
         }
         return temp;
 
@@ -332,14 +321,14 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
 
         if ((t1 != t2) && (t2 != T_NULL)){
-            imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "MultiExp", ctx.start.getLine(),ctx.start.getCharPositionInLine());
             return T_ERROR;
         }
         else {
             if ((t1 == T_INT) || (t2 == T_NULL)) {
                 return t1;
             } else {
-                imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+                imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "MultiExp", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
         }
@@ -356,7 +345,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             Integer v2 = (Integer) this.evalStack.popValue();
             Integer v1 = (Integer) this.evalStack.popValue();
             if (temp != temp2 && temp == T_INT) {
-                imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+                imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "MultiFact", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
             this.evalStack.pushValue(evaluarMUL_DIV(v1,v2,ctx));
@@ -409,6 +398,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             }
             visit(func.instructions);
             tablaIDs.closeScope();
+            System.out.println(func.returnType);
             return func.returnType;
 
         }
@@ -491,7 +481,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             evalStack.pushValue(temp.value);
             return T_FUNC;
         }
-        return -1;
+        return temp.type;
     }
 
     @Override
@@ -664,7 +654,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         int t2 = (int)visit(ctx.moreHashContent());
         if ((t1 == T_HASH) && (t2 == T_HASH))
             return T_HASH;
-        imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+        imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Hash", ctx.start.getLine(),ctx.start.getCharPositionInLine());
         return T_ERROR;
     }
 
@@ -674,7 +664,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         for( ParserUI.ExpressionContext ele : ctx.expression()){
             tipo = (int)visit(ele);
             if (tipo == T_ERROR) {
-                imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+                imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Hash", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
         }
@@ -687,7 +677,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         for( ParserUI.HashContentContext ele : ctx.hashContent()) {
             tipo = (int) visit(ele);
             if (tipo == T_ERROR) {
-                imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+                imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Hash", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
         }
@@ -782,6 +772,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             state = (int)visit(ele);
             if(ele.getChild(0).getText().toLowerCase().contains("return")){
                 returnType = state;
+                break;
             }
             if(state == T_ERROR)
                 return T_ERROR;

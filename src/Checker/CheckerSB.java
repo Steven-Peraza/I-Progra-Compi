@@ -136,7 +136,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
             return T_ERROR;
         }
         else if(temp != temp2){
-            imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Hash", ctx.start.getLine(),ctx.start.getCharPositionInLine());
             return T_ERROR;
         }
         else
@@ -185,7 +185,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
 
         if (t1 != t2){
             //System.out.println("Tipos incompatibles al realizar la OP de "+ctx.additionFactor().getText());
-            imprimirError(ERROR_NON_COMPATIBLE_TYPES,ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Hash",ctx.start.getLine(),ctx.start.getCharPositionInLine());
             return T_ERROR;
         }
         else
@@ -193,7 +193,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
                 return  t1;
             }
             else{
-                imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+                imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Hash", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;}
 
     }
@@ -207,7 +207,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
                 ctx.multiplicationExpression()) {
             temp2 = (int)visit(i);
             if (temp != temp2) {
-                imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+                imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Hash", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
         }
@@ -222,18 +222,23 @@ public class CheckerSB extends ParserUIBaseVisitor{
         int t1 = (int)visit(ctx.elementExpression());
 
         int t2 = (int)visit(ctx.multiplicationFactor());
-
+        if(t1 == T_NEUTRO){
+            t1 = T_INT;
+        }
+        if(t2 == T_NEUTRO){
+            t2 = T_INT;
+        }
 
 
         if ((t1 != t2) && (t2 != T_NULL)){
-            imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+            imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Hash", ctx.start.getLine(),ctx.start.getCharPositionInLine());
             return T_ERROR;
         }
         else {
             if ((t1 == T_INT) || (t2 == T_NULL)) {
                 return t1;
             } else {
-                imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+                imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Hash", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
         }
@@ -538,7 +543,7 @@ public class CheckerSB extends ParserUIBaseVisitor{
         for( ParserUI.HashContentContext ele : ctx.hashContent()) {
             tipo = (int) visit(ele);
             if (tipo == T_ERROR) {
-                imprimirError(ERROR_NON_COMPATIBLE_TYPES, ctx.start.getLine(),ctx.start.getCharPositionInLine());
+                imprimirError(ERROR_NON_COMPATIBLE_TYPES+ "Hash", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                 return T_ERROR;
             }
         }
