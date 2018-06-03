@@ -452,7 +452,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
     public Object visitElementAccessAST(ParserUI.ElementAccessASTContext ctx) {
 
         Object temp = visit(ctx.expression());
-
+        
         if (temp == null) {
             return T_NULL;
         }
