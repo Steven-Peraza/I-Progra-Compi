@@ -1,6 +1,8 @@
 
 let a = "Hola";
-
+let x = fn(d,c){
+return 5
+}
 let b = (3+3)*9;
 
 let c = 7-4;
@@ -11,43 +13,8 @@ let g = [1,2]
 
 let y = 1
 
+let m = x(1,b)
+
 let e = "asds"=="asd";
 
-let o =  len([6,7,8]);
-
-let p =  first([6,7,8]);
-
-let i =  last([6,7,8]);
-
-let u =  rest([6,7,8]);
-
-let g = [1,1];
-
-let q=[[2,3],1,"asd",{1:1}];
-
-let x = fn(d,c){
-let y = d+c
-puts(y)
-}
-puts(a)
-
-
-x(1,10)
-
-let y = {[1,2]:2,"asd":1,["asd"]:[1]}
-
-//let i = g==q;
-
-/*
-if b<d
-{
-let r = b+6;
-puts(r)}
-else
-{if 4==4{
-puts(4)
-}
-else{
-puts(5)
-}}*/
 
