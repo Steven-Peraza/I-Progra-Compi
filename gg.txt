@@ -18,20 +18,3 @@ let m = x(1,b)
 let e = "asds"=="asd";
 
 
-puts(a)
-
-
-
-/*
-if b<d
-{
-let r = b+6;
-puts(r)}
-else
-{if 4==4{
-puts(4)
-}
-else{
-puts(5)
-}}*/
-

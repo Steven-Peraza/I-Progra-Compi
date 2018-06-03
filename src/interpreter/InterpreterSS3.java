@@ -109,7 +109,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         }
         else if (tipo == T_ARRAY){
             //String arr = (String) this.evalStack.popValue();
-            LinkedList<Integer> arr = (LinkedList<Integer>) this.evalStack.popValue();
+            LinkedList<IDTableKaio.ExpressionContainer> arr = (LinkedList<IDTableKaio.ExpressionContainer>) this.evalStack.popValue();
             System.out.println("Pila Arr "+arr);
             this.dataS.addData(ctx.identifier().getText(),arr,tipo);
             tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,arr);
@@ -117,17 +117,18 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
         }
         else if (tipo == T_HASH){
-            HashMap<Object,Object> ha = (HashMap<Object,Object>) this.evalStack.popValue();
+            HashMap<Object,Object> ha = new HashMap<Object, Object>();
+            ha = (HashMap<Object, Object>) ((HashMap<Object,Object>) this.evalStack.popValue()).clone();
             System.out.println("Pila Hash "+ha);
             this.dataS.addData(ctx.identifier().getText(),ha,tipo);
             tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,ha);
             this.hash.clear();
 
         }
-        else if (tipo == T_RESER){
-            this.dataS.addData(ctx.identifier().getText(),ctx.expression().getText(),tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,null);
-            evalStack.pushValue(ctx.expression().getText());
+        else if (tipo == T_NEUTRO){
+            Object obj = (Object) this.evalStack.popValue();
+            this.dataS.addData(ctx.identifier().getText(),obj,tipo);
+            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,obj);
         }
         System.out.println(this.dataS.toString());
         return tipo;
@@ -200,14 +201,19 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
                 LinkedList<Integer> v3 = (LinkedList<Integer>) this.evalStack.popValue();
                 System.out.println("Comparison3 "+v3);
                 LinkedList<Integer> v2 = (LinkedList<Integer>) this.evalStack.popValue();
+                System.out.println("Comparison3 "+v2);
                 LinkedList<Integer> v1 = (LinkedList<Integer>) this.evalStack.popValue();
+                System.out.println("Comparison3 "+v1);
                 this.evalStack.pushValue(evaluarCOMPEQU(v1,v2,ctx));
 
             }
             else if (type1 == type2 && type1 == T_HASH && isAssignation){
-                HashMap<Object,Object> v3 = (HashMap<Object,Object>) this.evalStack.popValue();
+                /*HashMap<Object,Object> v3 = (HashMap<Object,Object>) this.evalStack.popValue();
+                System.out.println("Comparison3 "+v3);*/
                 HashMap<Object,Object> v2 = (HashMap<Object,Object>) this.evalStack.popValue();
+                System.out.println("Comparison2 "+v2);
                 HashMap<Object,Object> v1 = (HashMap<Object,Object>) this.evalStack.popValue();
+                System.out.println("Comparison1 "+v1);
                 this.evalStack.pushValue(evaluarCOMPEQU(v1,v2,ctx));
 
             }
@@ -513,13 +519,48 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitPExpARRAYFUNC(ParserUI.PExpARRAYFUNCContext ctx) {
-        int asd;
+        LinkedList<IDTableKaio.ExpressionContainer> asd = (LinkedList<IDTableKaio.ExpressionContainer>) visit(ctx.expressionList());
+        System.out.println();
         int reser = (int)visit(ctx.arrayFunctions());
-        if (reser == T_RESER)
+        if (reser == 11){
+            evaluarArrFunc((LinkedList<IDTableKaio.ExpressionContainer>) asd.getFirst().value,11);
+            return T_INT;
+        }
+        else if (reser == 12){
+            evaluarArrFunc((LinkedList<IDTableKaio.ExpressionContainer>) asd.getFirst().value,12);
+            return T_NEUTRO;
+        }
+        else if (reser == 13){
+            evaluarArrFunc((LinkedList<IDTableKaio.ExpressionContainer>) asd.getFirst().value,13);
+            return T_NEUTRO;
+        }
+        else if (reser == 14){
+            evaluarArrFunc((LinkedList<IDTableKaio.ExpressionContainer>) asd.getFirst().value,14);
             return T_ARRAY;
-        asd = (int) visit(ctx.expressionList());
+        }
+
         return T_ERROR;
     }
+
+    public void evaluarArrFunc(LinkedList<IDTableKaio.ExpressionContainer> ctx,int tipo){
+        if (tipo == 11){
+            this.evalStack.pushValue(ctx.size());
+        }
+        else if (tipo == 12){
+            this.evalStack.pushValue(ctx.getFirst().value);
+        }
+        else if (tipo == 13){
+            this.evalStack.pushValue(ctx.getLast().value);
+        }
+        else if (tipo == 14){
+            ctx.removeFirst();
+            this.evalStack.pushValue(ctx);
+        }
+        else {
+            this.evalStack.pushValue(ctx.add((IDTableKaio.ExpressionContainer)this.evalStack.popValue()));
+        }
+    }
+
 
     @Override
     public Object visitPExpFUNCLITE(ParserUI.PExpFUNCLITEContext ctx) {
@@ -547,32 +588,31 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitArrfunLEN(ParserUI.ArrfunLENContext ctx) {
-
-        return T_RESER;
+        return 11;
     }
 
     @Override
     public Object visitArrfunFIRST(ParserUI.ArrfunFIRSTContext ctx) {
 
-        return T_RESER;
+        return 12;
     }
 
     @Override
     public Object visitArrfunLAST(ParserUI.ArrfunLASTContext ctx) {
 
-        return T_RESER;
+        return 13;
     }
 
     @Override
     public Object visitArrfunREST(ParserUI.ArrfunRESTContext ctx) {
 
-        return T_RESER;
+        return 14;
     }
 
     @Override
     public Object visitArrfunPUSH(ParserUI.ArrfunPUSHContext ctx) {
 
-        return T_RESER;
+        return 15;
     }
 
     @Override
@@ -580,7 +620,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
         if(ctx.expressionList().children == null){
             return T_ARRAY;
         }
-        LinkedList<Object>  tipo =  (LinkedList<Object> )visit(ctx.expressionList());
+        LinkedList<Object>  tipo =  (LinkedList<Object>)visit(ctx.expressionList());
         this.evalStack.pushValue(tipo);
         //System.out.println("Array Verdad "+tipo);
         return T_ARRAY;
@@ -668,6 +708,9 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
                 return T_ERROR;
             }
         }
+        Object value = this.evalStack.popValue();
+        Object key = this.evalStack.popValue();
+        this.hash.put(key,value);
         return T_HASH;
     }
 
