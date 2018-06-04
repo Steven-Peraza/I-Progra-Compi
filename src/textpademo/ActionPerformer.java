@@ -3,6 +3,7 @@ package textpademo;
 import generated.ParserUI;
 import generated.ScannerSS4;
 import Checker.CheckerSB;
+import interpreter.InterpreterSS3;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -438,7 +439,10 @@ public class ActionPerformer {
             int state = (int)v.visit(tree);
             //System.out.println(state);
             if(state != -1) {
+                InterpreterSS3 it = new InterpreterSS3();
+                it.visit(tree);
                 System.out.println("Compilacion Exitosa!!\n");
+
             }else{
                 System.out.println("Compilacion Fallida");
             }
@@ -518,7 +522,7 @@ public class ActionPerformer {
     /**
      * Retorna la ruta de la ubicación de un archivo en forma reducida.
      *
-     * @param  la ruta de un archivo
+     * @param  longPath ruta de un archivo
      * @return la ruta reducida del archivo
      */
     private static String shortPathName(String longPath) {

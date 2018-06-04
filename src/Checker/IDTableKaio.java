@@ -83,18 +83,17 @@ public class IDTableKaio {
 
     public Ident insertar(String nombre, int tipo, ParserRuleContext declaracion, Object value)
     {
-        Token token = new CommonToken(0,nombre);
-        Ident i = new Ident(nivelActual,token,tipo,declaracion,0,6, value);
-        int j = 0;
-        while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
-            if (this.tabla.get(j).tok.getText().equals(nombre)) {
-                System.out.println("El identificador \"" + nombre + "\" ya ha sido declarado!!!");
-                return null;
-            }
-            j++;
+        Ident newVar = buscar(nombre);
+        if(newVar == null){
+            Token token = new CommonToken(0,nombre);
+            Ident i = new Ident(nivelActual,token,tipo,declaracion,0,6, value);
+            int j = 0;
+            this.tabla.push(newVar);
+        }else{
+            newVar.value = value;
         }
-        this.tabla.push(i); //deben ser una tabla estilo pila
-        return this.tabla.get(0);
+         //deben ser una tabla estilo pila
+        return newVar;
     }
 
     public Ident insertar(Token token, int tipo, ParserRuleContext declaracion)
@@ -115,17 +114,16 @@ public class IDTableKaio {
 
     public Ident insertar(Token token, int tipo, ParserRuleContext declaracion,int parametros,int returnType,Object value)
     {
-        Ident i = new Ident(nivelActual,token,tipo,declaracion,parametros, returnType,value);
-        int j = 0;
-        while (j < this.tabla.size() && this.tabla.get(j).nivel == nivelActual) {
-            if (this.tabla.get(j).tok.getText().equals(token.getText())&& (nivelActual == tabla.get(j).nivel)) {
-                System.out.println("El identificador \"" + token.getText() + "\" ya ha sido declarado. Line " + token.getLine() + ":" + token.getCharPositionInLine());
-                return null;
-            }
-            j++;
+        Ident newVar = buscar(token.getText());
+        if(newVar == null){
+            Ident i = new Ident(nivelActual,token,tipo,declaracion,0,6, value);
+            int j = 0;
+            this.tabla.push(newVar);
+        }else{
+            newVar.value = value;
         }
-        tabla.push(i); //deben ser una tabla estilo pila
-        return this.tabla.get(0);
+        //deben ser una tabla estilo pila
+        return newVar;
 
     }
 
