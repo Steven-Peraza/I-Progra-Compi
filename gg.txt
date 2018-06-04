@@ -19,4 +19,9 @@ let m = x(1,4)
 
 let e = "asds"=="asd";
 
+let a = 0
+puts(a)
+let a = 7
+
+
 

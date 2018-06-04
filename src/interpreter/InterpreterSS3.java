@@ -86,13 +86,33 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             Integer num = (Integer) this.evalStack.popValue();
             System.out.println("Pila NUM "+num);
             this.dataS.addData(ctx.identifier().getText(),num,tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,num);
+            IDTableKaio.Ident newVar = tablaIDs.buscar(ctx.identifier().getText());
+            if(newVar == null) {
+                tablaIDs.insertar(idToken.getSymbol(), tipo, ctx, param, fReturnType, num);
+            }
+            else{
+                newVar.value = num;
+                newVar.type = tipo;
+                newVar.returnType = fReturnType;
+                newVar.param = param;
+                newVar.decl = ctx;
+            }
         }
         else if (tipo == T_STRING){
             String str = (String) this.evalStack.popValue();
             System.out.println("Pila STR "+str);
             this.dataS.addData(ctx.identifier().getText(),str,tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,str);
+            IDTableKaio.Ident newVar = tablaIDs.buscar(ctx.identifier().getText());
+            if(newVar == null) {
+                tablaIDs.insertar(idToken.getSymbol(), tipo, ctx, param, fReturnType, str);
+            }
+            else{
+                newVar.value = str;
+                newVar.type = tipo;
+                newVar.returnType = fReturnType;
+                newVar.param = param;
+                newVar.decl = ctx;
+            }
 
         }
         else if(tipo == T_FUNC) {
@@ -104,7 +124,17 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             Boolean bol = (Boolean) this.evalStack.popValue();
             System.out.println("Pila Bool "+bol);
             this.dataS.addData(ctx.identifier().getText(),bol,tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,bol);
+            IDTableKaio.Ident newVar = tablaIDs.buscar(ctx.identifier().getText());
+            if(newVar == null) {
+                tablaIDs.insertar(idToken.getSymbol(), tipo, ctx, param, fReturnType, bol);
+            }
+            else{
+                newVar.value = bol;
+                newVar.type = tipo;
+                newVar.returnType = fReturnType;
+                newVar.param = param;
+                newVar.decl = ctx;
+            }
 
         }
         else if (tipo == T_ARRAY){
@@ -112,7 +142,17 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             LinkedList<IDTableKaio.ExpressionContainer> arr = (LinkedList<IDTableKaio.ExpressionContainer>) this.evalStack.popValue();
             System.out.println("Pila Arr "+arr);
             this.dataS.addData(ctx.identifier().getText(),arr,tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,arr);
+            IDTableKaio.Ident newVar = tablaIDs.buscar(ctx.identifier().getText());
+            if(newVar == null) {
+                tablaIDs.insertar(idToken.getSymbol(), tipo, ctx, param, fReturnType, arr);
+            }
+            else{
+                newVar.value = arr;
+                newVar.type = tipo;
+                newVar.returnType = fReturnType;
+                newVar.param = param;
+                newVar.decl = ctx;
+            }
 
 
         }
@@ -121,14 +161,34 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
             ha = (HashMap<Object, Object>) ((HashMap<Object,Object>) this.evalStack.popValue()).clone();
             System.out.println("Pila Hash "+ha);
             this.dataS.addData(ctx.identifier().getText(),ha,tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,ha);
+            IDTableKaio.Ident newVar = tablaIDs.buscar(ctx.identifier().getText());
+            if(newVar == null) {
+                tablaIDs.insertar(idToken.getSymbol(), tipo, ctx, param, fReturnType, ha);
+            }
+            else{
+                newVar.value = ha;
+                newVar.type = tipo;
+                newVar.returnType = fReturnType;
+                newVar.param = param;
+                newVar.decl = ctx;
+            }
             this.hash.clear();
 
         }
         else if (tipo == T_NEUTRO){
             Object obj = (Object) this.evalStack.popValue();
             this.dataS.addData(ctx.identifier().getText(),obj,tipo);
-            tablaIDs.insertar(idToken.getSymbol(),tipo,ctx,param,fReturnType,obj);
+            IDTableKaio.Ident newVar = tablaIDs.buscar(ctx.identifier().getText());
+            if(newVar == null) {
+                tablaIDs.insertar(idToken.getSymbol(), tipo, ctx, param, fReturnType, obj);
+            }
+            else{
+                newVar.value = obj;
+                newVar.type = tipo;
+                newVar.returnType = fReturnType;
+                newVar.param = param;
+                newVar.decl = ctx;
+            }
         }
         System.out.println(this.dataS.toString());
         return tipo;
