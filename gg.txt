@@ -1,8 +1,10 @@
 
 let a = "Hola";
+
 let x = fn(d,c){
-return 5
+return d+c
 }
+
 let b = (3+3)*9;
 
 let c = 7-4;
@@ -13,7 +15,7 @@ let g = [1,2]
 
 let y = g[2];
 
-let m = x(1,b)
+let m = x(1,4)
 
 let e = "asds"=="asd";
 
