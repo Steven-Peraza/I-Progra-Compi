@@ -362,7 +362,7 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
 
     @Override
     public Object visitElementExpressionAST(ParserUI.ElementExpressionASTContext ctx) {
-
+        System.out.println("asd"+ctx.getText());
         IDTableKaio.Ident res = tablaIDs.buscarAcceso(ctx.primitiveExpression().getText());
         int i = (int) visit(ctx.primitiveExpression());
 
@@ -378,8 +378,23 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
                 }
             }
             else if (i == T_ARRAY  ){
-                if(p == T_INT)
-                    return T_NEUTRO;
+                if(p == T_INT){
+                    int indez = (int) this.evalStack.popValue();
+                    this.evalStack.popValue();
+                    System.out.println(res.value);
+                    LinkedList<Object> ele = (LinkedList<Object>)res.value;
+
+                    if (ele.size() > indez)
+                    {
+                        IDTableKaio.ExpressionContainer ele2 = (IDTableKaio.ExpressionContainer)ele.get(indez);
+                        this.evalStack.pushValue(ele2);
+                        return T_NEUTRO;
+                    }
+                    else
+                        System.out.println("El índice es mayor al tamaño del array...");
+                        return T_ERROR;
+                }
+
                 else{
                     imprimirError("Se requiere un tipo Integer para realizar indexaciones en arrays", ctx.start.getLine(),ctx.start.getCharPositionInLine());
                     return T_ERROR;
@@ -442,7 +457,6 @@ public class InterpreterSS3 extends ParserUIBaseVisitor{
     public Object visitElementAccessAST(ParserUI.ElementAccessASTContext ctx) {
 
         Object temp = visit(ctx.expression());
-
         if (temp == null) {
             return T_NULL;
         }

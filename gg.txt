@@ -13,7 +13,7 @@ let d = 1+2;
 
 let g = [1,2]
 
-let y = 1
+let y = g[2];
 
 let m = x(1,4)
 
